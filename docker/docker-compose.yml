@@ -1,0 +1,57 @@
+services:
+  app:
+      environment:
+        - DB_HOST=app-db
+      build:
+        context: ../
+        dockerfile: docker/dockerfile
+      container_name: app
+      restart: unless-stopped
+      tty: true
+      networks:
+        - app-network
+      volumes:
+        - ../.:/var/www/
+        - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        - ./migrate.sh:/usr/local/bin/migrate.sh
+      depends_on:
+      - app-db
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    networks:
+      - app-network
+    ports:
+      - "80:${WEB_PORT_HTTP}"
+      - "443:${WEB_PORT_SSL}"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+
+  app-db:
+    image: mysql:latest
+    container_name: app-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    expose:
+      - 3306
+    ports:
+      - 3306:${DB_PORT}
+    volumes:
+      - app-db:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+    app-db:
+      driver: local
