@@ -1,27 +1,46 @@
 services:
+  app-db:
+    image: postgres:latest
+    container_name: app-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    expose:
+      - 5432
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - app-db:/var/lib/postgresql/data
+    networks:
+      - app-network
+
   app:
-      environment:
-        - DB_HOST=app-db
-      build:
-        context: ../
-        dockerfile: docker/dockerfile
-      container_name: app
-      restart: unless-stopped
-      tty: true
-      networks:
-        - app-network
-      volumes:
-        - ../.:/var/www/
-        - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-        - ./migrate.sh:/usr/local/bin/migrate.sh
-      depends_on:
+    build:
+      context: ../
+      dockerfile: docker/dockerfile
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    networks:
+      - app-network
+    depends_on:
       - app-db
+    environment:
+      DB_HOST: app-db
+    volumes:
+      - ../.:/var/www/
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    command: /bin/sh -c "php artisan config:cache && php artisan migrate --force && php-fpm"
 
   nginx:
     image: nginx:alpine
     container_name: nginx
     restart: unless-stopped
     tty: true
+    depends_on:
+      - app
     networks:
       - app-network
     ports:
@@ -30,28 +49,10 @@ services:
     volumes:
       - ./nginx/:/etc/nginx/conf.d/
 
-  app-db:
-    image: mysql:latest
-    container_name: app-db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    expose:
-      - 3306
-    ports:
-      - 3306:${DB_PORT}
-    volumes:
-      - app-db:/var/lib/mysql
-    networks:
-      - app-network
-
 networks:
   app-network:
     driver: bridge
 
 volumes:
-    app-db:
-      driver: local
+  app-db:
+    driver: local

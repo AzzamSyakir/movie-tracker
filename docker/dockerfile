@@ -5,18 +5,22 @@ ARG user=user
 ARG uid=1000
 ENV user=$user
 ENV uid=$uid
+
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nano && \
-    docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gd && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+        git \
+        curl \
+        libpq-dev \
+        postgresql-client \
+        libpng-dev \
+        libonig-dev \
+        libxml2-dev \
+        zip \
+        unzip \
+        nano && \
+    docker-php-ext-install pdo pdo_pgsql && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -29,8 +33,6 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
 # Set working directory and switch to non-root user
 WORKDIR /var/www
 USER $user
-#copy source to container
+
+# Copy source code to container
 COPY . .
-# Expose port and start PHP-FPM
-EXPOSE 9000
-CMD ["php-fpm"]
