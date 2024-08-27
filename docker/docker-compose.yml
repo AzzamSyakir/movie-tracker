@@ -15,7 +15,6 @@ services:
       - app-db:/var/lib/postgresql/data
     networks:
       - app-network
-
   app:
     build:
       context: ../
