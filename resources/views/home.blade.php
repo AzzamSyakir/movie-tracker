@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-    .movie-card {
+            .movie-card {
         border: 1px solid #ddd;
         border-radius: 12px;
         overflow: hidden;
@@ -21,8 +21,9 @@
 
     .movie-card img {
         width: 100%;
-        height: auto;
+        height: 100%;
         object-fit: cover;
+        display: block;
     }
 
     .movie-info {
@@ -167,13 +168,13 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                                <div class="button-group">
+                                               <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="info-btn">
+                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
                                                         <i class="fa fa-info-circle"></i> Info
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,13 +220,13 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                                <div class="button-group">
+                                               <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="info-btn">
+                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
                                                         <i class="fa fa-info-circle"></i> Info
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,13 +272,13 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                                <div class="button-group">
+                                               <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="info-btn">
+                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
                                                         <i class="fa fa-info-circle"></i> Info
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
