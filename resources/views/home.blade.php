@@ -5,80 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suka Film</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        /* movie css */
-        .movie-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            display: flex;  
-            flex-direction: column;
-            height: 100%;
-        }
-        .movie-card img {
-            width: 100%;
-            height: auto; /* Maintain aspect ratio */
-            object-fit: cover; /* Crop image to fit the container */
-        }
-        .movie-info {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            height: 100%;
-        }
-        .movie-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        .movie-overview {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 10px;
-            flex-grow: 1;
-        }
-        .movie-rating {
-            font-weight: bold;
-        }
+    .movie-card {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-        /* carousel css */
-        .carousel-control-prev.disabled, 
-        .carousel-control-next.disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-        .carousel-control-prev, 
-        .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(128, 128, 128, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            cursor: pointer;
-        }
+    .movie-card img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
 
-        .carousel-control-prev:hover,
-        .carousel-control-next:hover {
-            background-color: rgba(128, 128, 128, 0.4);
-        }
+    .movie-info {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
 
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            background-color: transparent; 
-            border-radius: 0; 
-            width: 20px;
-            height: 20px;
-        }
+    .movie-card:hover .movie-info {
+        opacity: 1;
+    }
+
+    .movie-title {
+        font-size: 1.1rem;
+        margin: 0;
+        text-align: center;
+    }
+
+    .movie-rating {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+        text-align: center;
+    }
+
+    .star-rating {
+        margin-right: 5px;
+    }
+
+    .movie-rating i {
+        color: #ffcc00;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+    }
+
+    .watchlist-btn, .info-btn {
+        background-color: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+    }
+
+    .watchlist-btn .fa, .info-btn .fa {
+        margin-right: 5px;
+    }
+
+    .carousel-control-prev, 
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(128, 128, 128, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background-color: rgba(128, 128, 128, 0.4);
+    }
     </style>
 </head>
 <body>
@@ -123,7 +156,25 @@
                                             <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
                                             <div class="movie-info">
                                                 <h2 class="movie-title">{{ $movie['title'] }}</h2>
-                                                <p class="movie-rating">Rating: {{ $movie['vote_average'] }} / 10</p>
+                                                <div class="movie-rating">
+                                                    <div class="star-rating">
+                                                        @for ($i = 0; $i < floor($movie['vote_average'] / 2); $i++)
+                                                            <i class="fa fa-star"></i>
+                                                        @endfor
+                                                        @if ($movie['vote_average'] % 2 != 0)
+                                                            <i class="fa fa-star-half-alt"></i>
+                                                        @endif
+                                                    </div>
+                                                    <span>{{ number_format($movie['vote_average'], 1) }}</span>
+                                                </div>
+                                                <div class="button-group">
+                                                    <button class="watchlist-btn">
+                                                        <i class="fa fa-plus-circle"></i> Watchlist
+                                                    </button>
+                                                    <button class="info-btn">
+                                                        <i class="fa fa-info-circle"></i> Info
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -157,7 +208,25 @@
                                             <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
                                             <div class="movie-info">
                                                 <h2 class="movie-title">{{ $movie['title'] }}</h2>
-                                                <p class="movie-rating">Rating: {{ $movie['vote_average'] }} / 10</p>
+                                                <div class="movie-rating">
+                                                    <div class="star-rating">
+                                                        @for ($i = 0; $i < floor($movie['vote_average'] / 2); $i++)
+                                                            <i class="fa fa-star"></i>
+                                                        @endfor
+                                                        @if ($movie['vote_average'] % 2 != 0)
+                                                            <i class="fa fa-star-half-alt"></i>
+                                                        @endif
+                                                    </div>
+                                                    <span>{{ number_format($movie['vote_average'], 1) }}</span>
+                                                </div>
+                                                <div class="button-group">
+                                                    <button class="watchlist-btn">
+                                                        <i class="fa fa-plus-circle"></i> Watchlist
+                                                    </button>
+                                                    <button class="info-btn">
+                                                        <i class="fa fa-info-circle"></i> Info
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -191,7 +260,25 @@
                                             <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}">
                                             <div class="movie-info">
                                                 <h2 class="movie-title">{{ $movie['title'] }}</h2>
-                                                <p class="movie-rating">Rating: {{ $movie['vote_average'] }} / 10</p>
+                                                <div class="movie-rating">
+                                                    <div class="star-rating">
+                                                        @for ($i = 0; $i < floor($movie['vote_average'] / 2); $i++)
+                                                            <i class="fa fa-star"></i>
+                                                        @endfor
+                                                        @if ($movie['vote_average'] % 2 != 0)
+                                                            <i class="fa fa-star-half-alt"></i>
+                                                        @endif
+                                                    </div>
+                                                    <span>{{ number_format($movie['vote_average'], 1) }}</span>
+                                                </div>
+                                                <div class="button-group">
+                                                    <button class="watchlist-btn">
+                                                        <i class="fa fa-plus-circle"></i> Watchlist
+                                                    </button>
+                                                    <button class="info-btn">
+                                                        <i class="fa fa-info-circle"></i> Info
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -208,59 +295,13 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Suka Film? All Rights Reserved.</p>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const carousels = document.querySelectorAll('.carousel');
-
-        carousels.forEach(carousel => {
-            const prevControl = carousel.querySelector('.carousel-control-prev');
-            const nextControl = carousel.querySelector('.carousel-control-next');
-            const carouselInner = carousel.querySelector('.carousel-inner');
-
-            function updateControls() {
-                const items = carouselInner.querySelectorAll('.carousel-item');
-                const activeItem = carouselInner.querySelector('.carousel-item.active');
-                const activeIndex = Array.from(items).indexOf(activeItem);
-
-                if (items.length === 0) {
-                    prevControl.classList.add('disabled');
-                    nextControl.classList.add('disabled');
-                    return;
-                }
-
-                prevControl.classList.toggle('disabled', activeIndex === 0);
-                nextControl.classList.toggle('disabled', activeIndex === items.length - 1);
-            }
-
-            $(carousel).on('slid.bs.carousel', function () {
-                updateControls();
-            });
-
-            updateControls();
-        });
-
-        function setCarouselItemHeight() {
-            let maxHeight = 0;
-
-            document.querySelectorAll('.carousel-item').forEach(item => {
-                item.style.height = 'auto'; 
-                const height = item.offsetHeight;
-                if (height > maxHeight) {
-                    maxHeight = height;
-                }
-            });
-
-            document.querySelectorAll('.carousel-item').forEach(item => {
-                item.style.height = `${maxHeight}px`;
-            });
-        }
-
-        setCarouselItemHeight();
-        window.addEventListener('resize', setCarouselItemHeight);
-    });
-    </script>
 </body>
 </html>
