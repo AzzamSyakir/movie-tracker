@@ -215,6 +215,7 @@ class ApiController
     public function SearchMovie($query){
         try{
         $response = Http::get("https://api.themoviedb.org/3/search/movie", [
+            'api_key' => $this->apiKey,
             'querry' => $query
         ]);
 
