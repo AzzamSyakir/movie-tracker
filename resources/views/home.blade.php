@@ -130,27 +130,7 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Suka Film?</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Movies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+   @include('navbar')
     <!-- Main Content -->
     <div class="container mt-4">
         <!-- Popular Movies Carousel -->
@@ -204,7 +184,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Now Playing Movies Carousel -->
         <div id="nowPlayingMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
             <h5>Now Playing Movies</h5>
@@ -256,7 +235,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Top Rated Movies Carousel -->
         <div id="topRatedMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
             <h5>Top Rated Movies</h5>
