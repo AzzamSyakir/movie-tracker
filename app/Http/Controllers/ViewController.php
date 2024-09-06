@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-class HomeController
+class ViewController
 {
     protected $apiController;
     public function __construct()
@@ -12,13 +12,18 @@ class HomeController
         $popularMovies = $this->apiController->getPopularMovies();
         $nowPlayingMovies = $this->apiController->GetNowPlayingMovies();
         $topRatedMovies = $this->apiController->GetTopRatedMovies();
-        // dd($popularMovies, $nowPlayingMovies, $topRatedMovies);
         return view('home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
     }
     public function movieDetail($movieId)
     {
-        $searchMovie = $this->apiController->SearchMovie($movieId);
-        dd($movieId);
-    }
+        $movieVideos = $this->apiController->getMovieVideos($movieId);
+        $movieDetails = $this->apiController->getMovieDetails($movieId);
+    
+        if ($movieDetails !== null) {
+            return view('movie-details', compact('movieDetails', 'movieVideos'));
+        }
+    
+        return view('movie-details', compact('movieVideos'));
+    }    
     
 }
