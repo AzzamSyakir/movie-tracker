@@ -7,136 +7,130 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-            .movie-card {
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        overflow: hidden;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
 
-    .movie-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
+        .movie-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
 
-    .movie-info {
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
+        .movie-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
-    .movie-card:hover .movie-info {
-        opacity: 1;
-    }
+        .movie-card:hover .movie-info {
+            opacity: 1;
+        }
 
-    .movie-title {
-        font-size: 1.1rem;
-        margin: 0;
-        text-align: center;
-    }
+        .movie-title {
+            font-size: 1.1rem;
+            margin: 0;
+            text-align: center;
+        }
 
-    .movie-rating {
-        display: flex;
-        align-items: center;
-        margin: 5px 0;
-        text-align: center;
-    }
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            text-align: center;
+        }
 
-    .star-rating {
-        margin-right: 5px;
-    }
+        .star-rating {
+            margin-right: 5px;
+        }
 
-    .movie-rating i {
-        color: #ffcc00;
-    }
+        .movie-rating i {
+            color: #ffcc00;
+        }
 
-    .button-group {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        position: absolute;
-        bottom: 10px;
-        width: 100%;
-    }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+        }
 
-    .watchlist-btn, .info-btn {
-        background-color: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        padding: 5px 10px;
-    }
+        .watchlist-btn, .info-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+        }
 
-    .watchlist-btn .fa, .info-btn .fa {
-        margin-right: 5px;
-    }
+        .watchlist-btn .fa, .info-btn .fa {
+            margin-right: 5px;
+        }
 
-    .carousel-control-prev, 
-    .carousel-control-next {
-        width: 40px;
-        height: 40px;
-        background-color: rgba(128, 128, 128, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-        cursor: pointer;
-    }
+        .carousel-control-prev, 
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(128, 128, 128, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    .carousel-control-prev:hover,
-    .carousel-control-next:hover {
-        background-color: rgba(128, 128, 128, 0.4);
-    }
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(128, 128, 128, 0.4);
+        }
+
+        .carousel-control-prev.disabled,
+        .carousel-control-next.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: rgba(128, 128, 128, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .carousel-control-prev.disabled:hover,
+        .carousel-control-next.disabled:hover {
+            background-color: rgba(128, 128, 128, 0.1);
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Suka Film?</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Movies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+   @include('navbar')
     <!-- Main Content -->
     <div class="container mt-4">
         <!-- Popular Movies Carousel -->
@@ -168,7 +162,7 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                               <div class="button-group">
+                                                <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
@@ -190,7 +184,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Now Playing Movies Carousel -->
         <div id="nowPlayingMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
             <h5>Now Playing Movies</h5>
@@ -220,7 +213,7 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                               <div class="button-group">
+                                                <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
@@ -242,7 +235,6 @@
                 </a>
             </div>
         </div>
-
         <!-- Top Rated Movies Carousel -->
         <div id="topRatedMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
             <h5>Top Rated Movies</h5>
@@ -272,7 +264,7 @@
                                                     </div>
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
-                                               <div class="button-group">
+                                                <div class="button-group">
                                                     <button class="watchlist-btn">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
@@ -304,5 +296,25 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function updateCarouselControls(carouselId) {
+                var carousel = $(carouselId);
+                var activeIndex = carousel.find('.carousel-item.active').index();
+                var itemCount = carousel.find('.carousel-item').length;
+
+                carousel.find('.carousel-control-prev').toggleClass('d-none', activeIndex === 0);
+                carousel.find('.carousel-control-next').toggleClass('d-none', activeIndex === itemCount - 1);
+            }
+
+            $('.carousel').on('slid.bs.carousel', function () {
+                updateCarouselControls('#' + $(this).attr('id'));
+            });
+
+            $('.carousel').each(function () {
+                updateCarouselControls('#' + $(this).attr('id'));
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ViewController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'homePage'])->name('homePage');
-Route::get('/movie-details/{movieId}', [HomeController::class, 'movieDetail'])->name('movieDetail');
+Route::get('/', [ViewController::class, 'homePage'])->name('homePage');
+Route::get('/movie-details/{movieId}', [ViewController::class, 'movieDetail'])->name('movieDetail');
