@@ -96,7 +96,7 @@
     </style>
 </head>
 <body>
-@include('navbar')
+@include('Navbar')
     <div class="container movie-detail">
         <div class="movie-header @if(!isset($movieVideos) || count($movieVideos) == 0) no-trailer @endif">
             <img class="movie-poster" src="https://image.tmdb.org/t/p/w500{{ $movieDetails['poster_path'] }}" alt="{{ $movieDetails['title'] }}">

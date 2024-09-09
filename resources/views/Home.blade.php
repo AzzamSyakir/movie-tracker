@@ -130,9 +130,10 @@
     </style>
 </head>
 <body>
-   @include('navbar')
+   @include('Navbar')
     <!-- Main Content -->
     <div class="container mt-4">
+        
         <!-- Popular Movies Carousel -->
         <div id="popularMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
             <h5>Popular Movies</h5>
