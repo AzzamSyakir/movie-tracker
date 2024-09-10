@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In Suka film</title>
+    <title>Sign in Suka film</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: #f3f4f6;
         }
-        .login-container {
+        .SignUp-container {
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -32,6 +32,11 @@
         .forgot-password, .details-link {
             color: #1d4ed8;
             font-size: 0.875rem;
+        }
+        .sign-up-link {
+            margin-left: auto;
+            color: #1d4ed8;
+            font-size: 16px;
         }
         .checkbox-label {
             color: #000000;
@@ -86,9 +91,9 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-<div class="login-container">
-    <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
-    <form method="POST" action="{{ route('LoginController') }}">
+<div class="SignUp-container">
+    <h1 class="text-2xl font-bold mb-6 text-center">Sign in</h1>
+    <form method="POST" action="{{ route('SignInController') }}">
         @csrf
         <div class="relative mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
@@ -113,7 +118,7 @@
             </div>
         </div>
         <div class="mb-6">
-            <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 sign-in-button">Sign In</button>
+            <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 sign-in-button">Sign in</button>
         </div>
     </form>
     <div class="flex items-center justify-center space-x-4">
@@ -127,7 +132,7 @@
         </a>
     </div>
     <div>
-        <a href="{{ route('SignUpView') }}" class="text-sm text-gray-500">Don't have an account? Sign Up</a>
+    Don't have an account? <a href="{{ route('SignUpView') }}" class="ml-2 text-sm text-gray-500 sign-up-link"">Sign up</a>
     </div>
 </div>
     <script>
