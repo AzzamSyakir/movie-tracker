@@ -8,12 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController
 {
-    public function Login(Request $request) {
+    public function SignIn(Request $request) {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
  
             return redirect()->intended('home');
         }
+    }
+    public function SignUp(Request $request){
+        $request = $request->only('email', 'password');
+        
     }
 }
