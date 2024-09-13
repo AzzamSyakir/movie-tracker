@@ -32,10 +32,9 @@ services:
     environment:
       - DB_HOST=app-db
     volumes:
-      - ./nginx/:/etc/nginx/
       - ../.:/var/www/html
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    entrypoint: ["/bin/sh", "-c", "./entrypoint.sh"]
+    entrypoint: ["/bin/sh", "-c", "./start.sh"]
 
 networks:
   app-network:
