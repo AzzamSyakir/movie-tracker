@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-3">
-                <h5 class="text-uppercase font-weight-bold">Suka Film?</h5>
+                <h5 class="text-uppercase font-weight-bold">Movie Addict?</h5>
                 <p class="small">Tempat untuk menemukan dan melacak film favoritmu. Selalu update dengan film-film terbaru dan informasi menarik seputar dunia perfilman.</p>
             </div>
             <div class="col-md-4 mb-3 text-center">
@@ -29,7 +29,7 @@
         </div>
         <hr class="border-gray-700">
         <div class="text-center small">
-            <p class="mb-0">&copy; 2024 Suka Film? All Rights Reserved.</p>
+            <p class="mb-0">&copy; 2024 Movie Addict? All Rights Reserved.</p>
         </div>
     </div>
 </footer>
@@ -37,24 +37,3 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        function updateCarouselControls(carouselId) {
-            var carousel = $(carouselId);
-            var activeIndex = carousel.find('.carousel-item.active').index();
-            var itemCount = carousel.find('.carousel-item').length;
-
-            carousel.find('.carousel-control-prev').toggleClass('d-none', activeIndex === 0);
-            carousel.find('.carousel-control-next').toggleClass('d-none', activeIndex === itemCount - 1);
-        }
-
-        $('.carousel').on('slid.bs.carousel', function () {
-            updateCarouselControls('#' + $(this).attr('id'));
-        });
-
-        $('.carousel').each(function () {
-            updateCarouselControls('#' + $(this).attr('id'));
-        });
-    });
-</script>

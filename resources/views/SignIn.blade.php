@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in Suka film</title>
+    <title>Sign in Movie Addict</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: #f3f4f6;
         }
-        .SignUp-container {
+        .SignIn-container {
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -91,7 +91,7 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-<div class="SignUp-container">
+<div class="SignIn-container">
     <h1 class="text-2xl font-bold mb-6 text-center">Sign in</h1>
     <form method="POST" action="{{ route('SignInController') }}">
         @csrf
@@ -110,7 +110,7 @@
             <a href="#" onclick="toggleDetails()" class="ml-2 text-sm text-gray-500 details-link">Details</a>
         </div>
         <div class="details-box">
-            <button type="button" class="close-btn" onclick="toggleDetails()">×</button>
+            <button type="button" class="close-btn" onclick="toggleDetails()"></button>
             <div class="title">"Remember me" Checkbox</div>
             <div class="content">
                 <p>Choosing "Remember me" reduces the number of times you're asked to Sign-In on this device.</p>

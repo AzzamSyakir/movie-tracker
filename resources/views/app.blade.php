@@ -3,15 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar Menu</title>
+    <title>@yield(section: 'title', default: 'Default Title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    @yield(section: 'custom-css')
     <style>
     body {
         margin: 0;
         font-family: Arial, sans-serif;
     }
-
     .navbar {
+    background-color: #2c3e50;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        color: #ecf0f1;
+        font-size: 24px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .navbar-brand:hover {
+        color: #e74c3c;
+    }
+
+   .navbar {
         display: flex;
         justify-content: center;
         padding: 5px 20px;
@@ -247,15 +268,16 @@
         }
     }
     </style>
-
-
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-                <a href="/" class="logo">Movie Addict</a>
-                <button class="menu-toggle" onclick="toggleMenu()">
+            <nav class="navbar">
+                <a href="/" class="navbar-brand">Movie Addict</a>
+            </nav>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
                     &#9776; <span class="menu-text">Menu</span>
                 </button>
             </div>
@@ -270,13 +292,10 @@
                 <button type="button">Watchlist</button>
             </div>
             <div class="sign-in">
-            <form action="{{ route('SignInView') }}" method="GET">
-                <button type="submit">Sign in</button>
-            </form>
-        </div>
-
-
-
+                <form action="{{ route(name: 'SignInView') }}" method="GET">
+                    <button type="submit">Sign in</button>
+                </form>
+            </div>
         </div>
     </nav>
     <div class="navbar-menu" id="navbar-menu">
@@ -289,10 +308,57 @@
             <li><a href="#">Watchlist</a></li>
         </ul>
     </div>
+
+    <div class="content">
+        @yield(section: 'content')
+    </div>
+
+    <footer class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <h5 class="text-uppercase font-weight-bold">Movie Addict?</h5>
+                <p class="small">Tempat untuk menemukan dan melacak film favoritmu. Selalu update dengan film-film terbaru dan informasi menarik seputar dunia perfilman.</p>
+            </div>
+            <div class="col-md-4 mb-3 text-center">
+                <h5 class="text-uppercase font-weight-bold">Follow Me</h5>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a href="https://github.com/AzzamSyakir" class="text-white mx-2" target="_blank">
+                        <i class="fab fa-github fa-2x"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/azzamsyakir/" class="text-white mx-2" target="_blank">
+                        <i class="fab fa-linkedin fa-2x"></i>
+                    </a>
+                    <a href="https://www.instagram.com/azmsykr_/" class="text-white mx-2" target="_blank">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    <a href="https://x.com/assa_kussa" class="text-white mx-2" target="_blank">
+                        <i class="fab fa-twitter fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 text-right">
+                <h5 class="text-uppercase font-weight-bold">Contact Me</h5>
+                <a href="mailto:azzamsykir@gmail.com" class="btn btn-outline-light btn-sm">Contact Me</a>
+            </div>
+        </div>
+        <hr class="border-gray-700">
+        <div class="text-center small">
+            <p class="mb-0">&copy; 2024 Movie Addict? All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    @yield(section: 'custom-js')
+
     <script>
         function toggleMenu() {
-            const menuItems = document.getElementById('navbar-menu');
-            menuItems.classList.toggle('active');
+            const navbarMenu = document.getElementById('navbar-menu');
+            navbarMenu.classList.toggle('active');
         }
     </script>
 </body>
