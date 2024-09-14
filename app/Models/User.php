@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'oauth_provider'
     ];
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The attributes that should be hidden for serialization.

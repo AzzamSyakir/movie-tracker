@@ -13,12 +13,20 @@ use Illuminate\Support\Str;
 class AuthController
 {
     public function SignIn(Request $request) {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+            
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+                
             return redirect()->route('HomeView');
         }
+    
+        return redirect()->back()->withInput()->with('error', 'Username or password incorrect');
     }
+    
     public function SignUp(){
         try {
             $new_user = new User();
