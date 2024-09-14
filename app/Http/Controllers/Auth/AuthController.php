@@ -17,14 +17,12 @@ class AuthController
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-            
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-                
             return redirect()->route('HomeView');
         }
     
-        return redirect()->back()->withInput()->with('error', 'Username or password incorrect');
+        return redirect()->back()->withInput()->with('error', 'Email or password incorrect');
     }
     
     public function SignUp(){

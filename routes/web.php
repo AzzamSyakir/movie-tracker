@@ -4,7 +4,7 @@ use App\Http\Controllers\ViewController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ViewController::class, 'homePage'])->name('homePage');
+Route::get('/', [ViewController::class, 'homePage'])->name('HomeView');
 
 Route::get('/movie-details/{movieId}', [ViewController::class, 'movieDetail'])->name('movieDetail');
 

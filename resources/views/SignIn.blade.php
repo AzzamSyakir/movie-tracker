@@ -10,7 +10,7 @@
         body {
             background-color: #f3f4f6;
         }
-        .SignUp-container {
+        .Sign-In-container {
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -34,7 +34,7 @@
             color: #1d4ed8;
             font-size: 0.875rem;
         }
-        .sign-up-link {
+        .Sign-Up-link {
             margin-left: auto;
             color: #1d4ed8;
             font-size: 16px;
@@ -42,7 +42,7 @@
         .checkbox-label {
             color: #000000;
         }
-        .sign-in-button {
+        .Sign-In-button {
             background-color: #000000;
             color: #ffffff;
         }
@@ -93,8 +93,15 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-<div class="SignUp-container">
+<div class="Sign-In-container">
     <h1 class="text-2xl font-bold mb-6 text-center">Sign in</h1>
+
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('SignInController') }}">
         @csrf
         <div class="relative mb-4">
@@ -120,9 +127,10 @@
             </div>
         </div>
         <div class="mb-6">
-            <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 sign-in-button">Sign in</button>
+            <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 Sign-In-button">Sign in</button>
         </div>
     </form>
+
     <div class="flex items-center justify-center space-x-4">
         <a href="#" class="flex items-center justify-center w-full bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 space-x-2">
             <i class="google-icon"></i>
@@ -134,9 +142,8 @@
         </a>
     </div>
     <div style="margin-top: 20px;">
-    Don't have an account? <a href="{{ route('SignUpView') }}" class="ml-2 text-sm text-gray-500 sign-up-link">Sign up</a>
+        Don't have an account? <a href="{{ route('SignUpView') }}" class="ml-2 text-sm text-gray-500 Sign-Up-link">Sign up</a>
     </div>
-
 </div>
     <script>
         function toggleDetails() {
