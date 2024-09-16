@@ -1,7 +1,6 @@
 @extends('app')
 
 @section('title', 'Home Page')
-
 @section('custom-css')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

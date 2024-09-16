@@ -7,6 +7,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     @yield(section: 'custom-css')
     <style>
+        /* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button */
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-toggle i {
+    font-size: 16px;
+    margin-right: 8px;
+}
+
+.account-name {
+    margin-left: 5px;
+}
+
+/* Dropdown button hover */
+.dropdown-toggle:hover {
+    background-color: #333;
+    color: #ffffff;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #1f1f1f;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+.dropdown-menu a {
+    color: #ffffff;
+    padding: 10px 15px; /* Adjust padding for spacing */
+    text-decoration: none;
+    display: block;
+    font-weight: bold;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.dropdown-menu a:hover {
+    background-color: #333;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
     body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -291,11 +354,25 @@
                 <i class="fas fa-bookmark"></i>
                 <button type="button">Watchlist</button>
             </div>
+            @guest
             <div class="sign-in">
                 <form action="{{ route(name: 'SignInView') }}" method="GET">
                     <button type="submit">Sign in</button>
                 </form>
             </div>
+            @endguest
+            @auth
+            <div class="dropdown">
+                <button class="dropdown-toggle">
+                <i class="fas fa-user"></i> <span class="account-name">{{ Auth::user()->name }}</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="/account-settings">Account Settings</a>
+                    <a href="/watchlist">Watchlist</a>
+                    <a href="/logout">Sign Out</a>
+                </div>
+            </div>
+            @endauth
         </div>
     </nav>
     <div class="navbar-menu" id="navbar-menu">
@@ -360,6 +437,20 @@
             const navbarMenu = document.getElementById('navbar-menu');
             navbarMenu.classList.toggle('active');
         }
+        document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        dropdownToggle.addEventListener('click', function() {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    });
     </script>
 </body>
 </html>
