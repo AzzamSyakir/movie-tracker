@@ -13,7 +13,10 @@ Route::get('/signin-form', function (){
  })->name('SignInView');
  Route::post('/signin', [AuthController::class, 'SignIn'])->name('SignInController');
 
- Route::get('/signup-form', function (){
+Route::get('/signup-form', function (){
   return view('SignUp');
  })->name('SignUpView');
- Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
+
+Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
+
+Route::get('/logout', action: [AuthController::class, 'SignOut'])->name('SignOutController');

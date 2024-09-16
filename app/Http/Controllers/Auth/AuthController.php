@@ -39,4 +39,13 @@ class AuthController
             return $e->getMessage();
         }
     }
+    public function SignOut(Request $request) {
+        Auth::logout();
+    
+        $request->session()->invalidate();
+    
+        $request->session()->regenerateToken();
+        return redirect()->route('HomeView');
+
+    }
 }
