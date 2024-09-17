@@ -22,5 +22,8 @@ Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpControlle
 
 Route::get('/logout', action: [AuthController::class, 'SignOut'])->name('SignOutController');
 
-Route::get('login/google/redirect', [SocialController::class, 'Redirect'])->name('RedirectGoogle');
-Route::get('login/google/callback', [SocialController::class, 'Callback'])->name('CallbackGoogle');
+Route::get('login/google/redirect', [SocialController::class, 'GoogleRedirect'])->name('GoogleRedirect');
+Route::get('login/google/callback', [SocialController::class, 'GoogleCallback'])->name('GoogleCallback');
+
+Route::get('login/facebook/redirect', [SocialController::class, 'FacebookRedirect'])->name('FacebookRedirect');
+Route::get('login/facebook/callback', [SocialController::class, 'FacebookCallback'])->name('FacebookCallback');

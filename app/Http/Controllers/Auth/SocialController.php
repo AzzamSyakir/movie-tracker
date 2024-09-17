@@ -10,11 +10,11 @@ use Str;
 class SocialController
 {
     //google authentication
-    public function Redirect()
+    public function GoogleRedirect()
 {
         return Socialite::driver('google')->redirect();
 }
-    public function Callback()
+    public function GoogleCallback()
 {
     $userFromGoogle = Socialite::driver('google')->user();
 
@@ -42,4 +42,37 @@ class SocialController
 
     return redirect()->route('HomeView');
 }
+  //facebook authentication
+  public function FacebookRedirect()
+  {
+          return Socialite::driver('facebook')->redirect();
+  }
+      public function FacebookCallback()
+  {
+      $userFromFacebook = Socialite::driver('facebook')->user();
+      $userFromDatabase = User::where('social_id', $userFromFacebook->getId())->first();
+    if (!$userFromDatabase) {
+          $newUser = new User([
+              'id' =>  Str::uuid(),
+              'social_id' => $userFromFacebook->getId(),
+              'name' => $userFromFacebook->getName(),            
+              'oauth_provider' => 'facebook'
+          ]);
+          if ($userFromFacebook->getEmail() == null) {
+            $newUser->email = $userFromFacebook->getName() . '@facebook.com';
+        }  
+  
+          $newUser->save(); 
+  
+          Auth::login($newUser);
+          session()->regenerate();
+  
+          return redirect('/');
+      }
+  
+      Auth::login($userFromDatabase);
+      session()->regenerate();
+  
+      return redirect()->route('HomeView');
+  }
 }

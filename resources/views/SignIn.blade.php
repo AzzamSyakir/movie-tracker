@@ -132,11 +132,11 @@
     </form>
 
     <div class="flex items-center justify-center space-x-4">
-        <a href="{{route('RedirectGoogle')}}" class="flex items-center justify-center w-full bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 space-x-2">
+        <a href="{{route('GoogleRedirect')}}" class="flex items-center justify-center w-full bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 space-x-2">
             <i class="google-icon"></i>
             <span>Google</span>
         </a>
-        <a href="#" class="flex items-center justify-center w-full bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 space-x-2">
+        <a href="{{route('FacebookRedirect')}}" class="flex items-center justify-center w-full bg-white border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 space-x-2">
             <i class="fab fa-facebook-f facebook-icon"></i>
             <span>Facebook</span>
         </a>
