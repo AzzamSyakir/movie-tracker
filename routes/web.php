@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,6 @@ Route::get('/signup-form', function (){
 Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
 
 Route::get('/logout', action: [AuthController::class, 'SignOut'])->name('SignOutController');
+
+Route::get('login/google/redirect', [SocialController::class, 'Redirect'])->name('RedirectGoogle');
+Route::get('login/google/callback', [SocialController::class, 'Callback'])->name('CallbackGoogle');

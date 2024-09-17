@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'oauth_provider'
+        'oauth_provider',
+        'social_id'
     ];
     public $incrementing = false;
     protected $keyType = 'string';
