@@ -16,9 +16,20 @@ class AuthController
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'remember' =>['nullable']
         ]);
-        if (Auth::attempt($credentials)) {
+
+
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $request->boolean('remember'))) {
             $request->session()->regenerate();
+            if ($request->boolean('remember')) {
+                Auth::user()->setRememberToken(Str::random(60));
+                Auth::user()->save();
+            }
+            else {
+                Auth::user()->setRememberToken(null);
+                Auth::user()->save();       
+            }
             return redirect()->route('HomeView');
         }
     
