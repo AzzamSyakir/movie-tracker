@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use Auth;
 class ViewController
 {
     protected $apiController;
@@ -12,7 +13,12 @@ class ViewController
         $popularMovies = $this->apiController->getPopularMovies();
         $nowPlayingMovies = $this->apiController->GetNowPlayingMovies();
         $topRatedMovies = $this->apiController->GetTopRatedMovies();
-        return view('home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
+        if(Auth::check()) {
+            $userAuthenticate = true;
+            return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies', 'userAuthenticate'));
+
+        }
+        return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
     }
     public function movieDetail($movieId)
     {
@@ -20,10 +26,10 @@ class ViewController
         $movieDetails = $this->apiController->getMovieDetails($movieId);
     
         if ($movieDetails !== null) {
-            return view('movie-details', compact('movieDetails', 'movieVideos'));
+            return view('MovieDetail', compact('movieDetails', 'movieVideos'));
         }
     
-        return view('movie-details', compact('movieVideos'));
+        return view('MovieDetail', compact('movieVideos'));
     }    
     
 }

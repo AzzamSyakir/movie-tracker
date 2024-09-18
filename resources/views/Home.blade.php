@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('app')
+
+@section('title', 'Home Page')
+@section('custom-css')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suka Film</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
@@ -128,10 +128,33 @@
             background-color: rgba(128, 128, 128, 0.1);
         }
     </style>
-</head>
-<body>
-   @include('navbar')
-    <!-- Main Content -->
+@endsection
+@section('custom-js')
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                function updateCarouselControls(carouselId) {
+                    var carousel = $(carouselId);
+                    var activeIndex = carousel.find('.carousel-item.active').index();
+                    var itemCount = carousel.find('.carousel-item').length;
+
+                    carousel.find('.carousel-control-prev').toggleClass('d-none', activeIndex === 0);
+                    carousel.find('.carousel-control-next').toggleClass('d-none', activeIndex === itemCount - 1);
+                }
+
+                $('.carousel').on('slid.bs.carousel', function () {
+                    updateCarouselControls('#' + $(this).attr('id'));
+                });
+
+                $('.carousel').each(function () {
+                    updateCarouselControls('#' + $(this).attr('id'));
+                });
+            });
+        </script>
+@endsection
+@section('content')
     <div class="container mt-4">
         <!-- Popular Movies Carousel -->
         <div id="popularMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
@@ -287,34 +310,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-        <p>&copy; 2024 Suka Film? All Rights Reserved.</p>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            function updateCarouselControls(carouselId) {
-                var carousel = $(carouselId);
-                var activeIndex = carousel.find('.carousel-item.active').index();
-                var itemCount = carousel.find('.carousel-item').length;
-
-                carousel.find('.carousel-control-prev').toggleClass('d-none', activeIndex === 0);
-                carousel.find('.carousel-control-next').toggleClass('d-none', activeIndex === itemCount - 1);
-            }
-
-            $('.carousel').on('slid.bs.carousel', function () {
-                updateCarouselControls('#' + $(this).attr('id'));
-            });
-
-            $('.carousel').each(function () {
-                updateCarouselControls('#' + $(this).attr('id'));
-            });
-        });
-    </script>
-</body>
-</html>
+@endsection

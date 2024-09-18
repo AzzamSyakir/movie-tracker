@@ -254,7 +254,7 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-                <a href="/" class="logo">Suka Film</a>
+                <a href="/" class="logo">Movie Addict</a>
                 <button class="menu-toggle" onclick="toggleMenu()">
                     &#9776; <span class="menu-text">Menu</span>
                 </button>
@@ -270,8 +270,13 @@
                 <button type="button">Watchlist</button>
             </div>
             <div class="sign-in">
-                <button type="button">Sign In</button>
-            </div>
+            <form action="{{ route('SignInView') }}" method="GET">
+                <button type="submit">Sign in</button>
+            </form>
+        </div>
+
+
+
         </div>
     </nav>
     <div class="navbar-menu" id="navbar-menu">

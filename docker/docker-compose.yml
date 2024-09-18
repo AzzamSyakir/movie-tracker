@@ -30,7 +30,7 @@ services:
       DB_HOST: app-db
     volumes:
       - ../.:/var/www/
-      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./conf/php/conf.d:/etc/php/conf.d
     command: /bin/sh -c "php artisan config:cache && php artisan migrate --force && php-fpm"
 
   nginx:
@@ -46,7 +46,8 @@ services:
       - "80:${WEB_PORT_HTTP}"
       - "443:${WEB_PORT_SSL}"
     volumes:
-      - ./nginx/:/etc/nginx/conf.d/
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d
+      - ../.:/var/www/
 
 networks:
   app-network:
