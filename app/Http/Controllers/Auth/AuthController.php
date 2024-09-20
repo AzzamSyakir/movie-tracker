@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Watchlist;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -38,12 +39,18 @@ class AuthController
     
     public function SignUp(){
         try {
-            $new_user = new User();
-            $new_user->id = Str::uuid();
-            $new_user->name = request('name');
-            $new_user->email = request('email');
-            $new_user->password = Hash::make(request('password'));
-            $new_user->save();
+            $newUser = new User([
+                'id' =>  Str::uuid(),
+                'name' => request('name'),
+                'email' => request('email'),
+                'password' => request('password'),
+            ]);
+            $newWatchlist = new Watchlist([
+                'id' =>  Str::uuid(),
+                'user_id' => $newUser->id
+            ]);
+            $newUser->save();
+            $newWatchlist->save();
             return redirect()->route('SignInView');
         }
         catch (Exception $e) {

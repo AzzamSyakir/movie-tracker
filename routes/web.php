@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Middleware\EnsureUserAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ViewController::class, 'homePage'])->name('HomeView');
@@ -17,13 +18,15 @@ Route::get('/signin-form', function (){
 Route::get('/signup-form', function (){
   return view('SignUp');
  })->name('SignUpView');
-
 Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
 
-Route::get('/logout', action: [AuthController::class, 'SignOut'])->name('SignOutController');
+Route::get('/logout', [AuthController::class, 'SignOut'])->name('SignOutController');
 
 Route::get('login/google/redirect', [SocialController::class, 'GoogleRedirect'])->name('GoogleRedirect');
 Route::get('login/google/callback', [SocialController::class, 'GoogleCallback'])->name('GoogleCallback');
 
 Route::get('login/facebook/redirect', [SocialController::class, 'FacebookRedirect'])->name('FacebookRedirect');
 Route::get('login/facebook/callback', [SocialController::class, 'FacebookCallback'])->name('FacebookCallback');
+
+Route::get('/watchlist', [ViewController::class, 'Watchlist'])->name('WatchlistView')->middleware(EnsureUserAuthenticated::class);
+Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
