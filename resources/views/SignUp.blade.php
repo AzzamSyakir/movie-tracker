@@ -144,7 +144,7 @@
         const notification = document.createElement('div');
         notification.className = 'notification show';
         notification.innerHTML = `${message} <button onclick="this.parentElement.style.display='none';">&times;</button>`;
-        notifications.appendChild(notification);
+        notifications.AppendChild(notification);
     }
 </script>
 

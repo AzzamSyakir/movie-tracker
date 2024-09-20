@@ -1,10 +1,7 @@
-@extends('app')
+@extends('App')
 
 @section('title', $movieDetails['title'])
 @section('custom-css')
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
             background-color: #f4f4f4;

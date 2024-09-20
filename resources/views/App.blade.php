@@ -5,8 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield(section: 'title', default: 'Default Title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     @yield(section: 'custom-css')
     <style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content {
+        flex-grow: 1;
+    }
+
+    footer {
+        margin-top: auto;
+        background-color: #1f1f1f;
+        color: white;
+        padding: 20px;
+    }
+
     .dropdown {
         position: relative;
         display: inline-block;
@@ -350,13 +375,14 @@
                     <i class="fas fa-search"></i>
                 </button>
             </div>
-            <div class="watchlist">
+           <div class="watchlist">
                 <i class="fas fa-bookmark"></i>
-                <button type="button">Watchlist</button>
+                <button onclick="window.location.href = '{{ route('WatchlistView') }}'" type="button">Watchlist</button>
             </div>
+
             @guest
             <div class="sign-in">
-                <form action="{{ route(name: 'SignInView') }}" method="GET">
+                <form action="{{ route('SignInView') }}" method="GET">
                     <button type="submit">Sign in</button>
                 </form>
             </div>
@@ -368,7 +394,7 @@
                 </button>
                 <div class="dropdown-menu">
                     <a href="/account-settings">Account Settings</a>
-                    <a href="/watchlist">Watchlist</a>
+                    <a href="{{route('WatchlistView')}}">Watchlist</a>
                     <a href={{route('SignOutController')}}>Sign Out</a>
                 </div>
             </div>
@@ -384,7 +410,7 @@
             <li><a href="#">TV Shows</a></li>
             <li><a href="#">Celebrities</a></li>
             <li><a href="#">News</a></li>
-            <li><a href="#">Watchlist</a></li>
+            <li><a href="{{route('WatchlistView')}}">Watchlist</a></li>
         </ul>
     </div>
 
