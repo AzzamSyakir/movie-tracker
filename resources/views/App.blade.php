@@ -377,7 +377,7 @@
             </div>
            <div class="watchlist">
                 <i class="fas fa-bookmark"></i>
-                <button onclick="window.location.href = '{{ route('WatchlistView') }}'" type="button">Watchlist</button>
+                <button onclick="window.location.href = '{{ route('GetWatchlist') }}'" type="button">Watchlist</button>
             </div>
 
             @guest
@@ -394,7 +394,7 @@
                 </button>
                 <div class="dropdown-menu">
                     <a href="/account-settings">Account Settings</a>
-                    <a href="{{route('WatchlistView')}}">Watchlist</a>
+                    <a href="{{route('GetWatchlist')}}">Watchlist</a>
                     <a href={{route('SignOutController')}}>Sign Out</a>
                 </div>
             </div>
@@ -410,7 +410,7 @@
             <li><a href="#">TV Shows</a></li>
             <li><a href="#">Celebrities</a></li>
             <li><a href="#">News</a></li>
-            <li><a href="{{route('WatchlistView')}}">Watchlist</a></li>
+            <li><a href="{{route('GetWatchlist')}}">Watchlist</a></li>
         </ul>
     </div>
 

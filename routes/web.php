@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ViewController::class, 'homePage'])->name('HomeView');
 
-Route::get('/movie-details/{movieId}', [ViewController::class, 'movieDetail'])->name('movieDetail');
+Route::get('/movie-details/{movieId}', [ViewController::class, 'MovieDetail'])->name('MovieDetail');
 
 Route::get('/signin-form', function (){
   return view('SignIn');
@@ -28,5 +28,6 @@ Route::get('login/google/callback', [SocialController::class, 'GoogleCallback'])
 Route::get('login/facebook/redirect', [SocialController::class, 'FacebookRedirect'])->name('FacebookRedirect');
 Route::get('login/facebook/callback', [SocialController::class, 'FacebookCallback'])->name('FacebookCallback');
 
-Route::get('/watchlist', [ViewController::class, 'Watchlist'])->name('WatchlistView')->middleware(EnsureUserAuthenticated::class);
-Route::post('/signup', [AuthController::class, 'SignUp'])->name('SignUpController');
+Route::get('/watchlist', [ViewController::class, 'GetWatchlist'])->name('GetWatchlist')->middleware(EnsureUserAuthenticated::class);
+Route::post('/add-watchlist/{movieId}', [ViewController::class, 'AddWatchlist'])->name('AddWatchlist')->middleware(EnsureUserAuthenticated::class);
+Route::delete('/delete-watchlist/{movieId}', [ViewController::class, 'DeleteWatchlist'])->name('DeleteWatchlist')->middleware(EnsureUserAuthenticated::class);

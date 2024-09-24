@@ -14,7 +14,7 @@ class WatchlistMovie extends Model
     public $incrementing = false;
     protected $keyType = 'uuid';
 
-    protected $fillable = ['watchlist_id', 'movie_id'];
+    protected $fillable = ['watchlist_id', 'movie_id', 'id'];
 
     public function watchlist()
     {

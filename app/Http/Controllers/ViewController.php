@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Watchlist;
+use App\Models\WatchlistMovie;
 use Auth;
 use Carbon\Carbon;
+use Str;
 class ViewController
 {
     protected $apiController;
@@ -33,35 +35,62 @@ class ViewController
     
         return view('MovieDetail', compact('movieVideos'));
     }
-    public function Watchlist()
+    public function GetWatchlist()
     {
         $userId = Auth::user()->id;
         $watchlist = Watchlist::where('user_id', $userId)->first();
+    
+        $watchlistArray = [
+            'name' => Auth::user()->name,
+        ];
+    
+        $createdSince = Carbon::parse($watchlist->created_at);
+        $today = Carbon::now();
+        $daysSinceCreation = $createdSince->diffInDays($today);
+        $daysSinceCreation = round($daysSinceCreation);
+    
+        if ($daysSinceCreation >= 365) {
+            $yearsSinceCreation = round($daysSinceCreation / 365);
+            $watchlistArray['createdSince'] = $yearsSinceCreation . ' year' . ($yearsSinceCreation > 1 ? 's' : '') . ' ago';
+        } elseif ($daysSinceCreation >= 30) {
+            $monthsSinceCreation = round($daysSinceCreation / 30);
+            $watchlistArray['createdSince'] = $monthsSinceCreation . ' month' . ($monthsSinceCreation > 1 ? 's' : '') . ' ago';
+        } elseif ($daysSinceCreation >= 7) {
+            $weeksSinceCreation = round($daysSinceCreation / 7);
+            $watchlistArray['createdSince'] = $weeksSinceCreation . ' week' . ($weeksSinceCreation > 1 ? 's' : '') . ' ago';
+        } elseif ($daysSinceCreation > 0) {
+            $watchlistArray['createdSince'] = $daysSinceCreation . ' day' . ($daysSinceCreation > 1 ? 's' : '') . ' ago';
+        } else {
+            $watchlistArray['createdSince'] = 'today';
+        }
         $movies = $watchlist->watchlistMovies;
     
         if ($movies->isNotEmpty()) {
-            $movieId = $movies[0]->movie_id;
-            $movieVideos = $this->apiController->getMovieVideos($movieId);
-            $movieDetails = $this->apiController->getMovieDetails($movieId);
-    
-            return view('Watchlist', compact('movieVideos', 'movieDetails'));
+            foreach ($movies as $watchlistMovie) {
+                $movieId = $watchlistMovie->movie_id;
+                $movieDetails = $this->apiController->getMovieDetails($movieId);
+                $watchlistArray['movies'][] = $movieDetails;
+            }
+            return view('Watchlist', compact('watchlistArray'));
         }
-    
-        $watchlist['name'] = Auth::user()->name;
-        $createdSince = Carbon::parse($watchlist['created_at']);
-        $today = Carbon::now();
-        $daysSinceCreation = $createdSince->diffInDays($today);
         
-        $watchlist['createdSince'] = round($daysSinceCreation);
-        if ($watchlist['createdSince'] == 0) {
-            $watchlist['createdSince'] = 'today';
-        } elseif ($watchlist['createdSince'] == 1) {
-            $watchlist['createdSince'] = '1 day ago';
-        } else {
-             $watchlist['createdSince'] = "days ago";
-        }
-        return view('Watchlist', compact('watchlist'))->with('message', 'this list is empty.');
+        return view('Watchlist', compact('watchlistArray'))->with('message', $movies->isEmpty() ? 'this list is empty.' : '');
     }
     
-
+    public function addWatchlist($movieId) {
+        $userId = Auth::user()->id;
+        $watchlist = Watchlist::where('user_id', $userId)->first();
+        $watchlistMovies = new WatchlistMovie([
+            'id' =>  Str::uuid(),
+            'movie_id' => $movieId,
+            'watchlist_id' => $watchlist->id
+        ]);
+        $watchlistMovies->save();
+        return redirect()->back();
+        }
+    public function DeleteWatchlist($movieId){
+        $WatchlistMovie = WatchlistMovie::where('movie_id',$movieId);
+        $WatchlistMovie->delete();
+        return redirect()->back();
+    }
 }

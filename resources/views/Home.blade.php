@@ -62,6 +62,10 @@
         .movie-rating i {
             color: #ffcc00;
         }
+        a.info-btn {
+            text-decoration: none;
+            background-color: transparent;
+        }
 
         .button-group {
             display: flex;
@@ -77,15 +81,25 @@
             background-color: transparent;
             border: none;
             color: white;
-            cursor: pointer;
             font-size: 14px;
             display: flex;
             align-items: center;
             padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .watchlist-btn .fa, .info-btn .fa {
             margin-right: 5px;
+        }
+
+        .watchlist-btn:hover, .info-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #f1f1f1;
+        }
+
+        .watchlist-btn:hover .fa, .info-btn:hover .fa {
+            color: #f1f1f1;
         }
 
         .carousel-control-prev, 
@@ -182,10 +196,13 @@
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
-                                                        <i class="fa fa-plus-circle"></i> Watchlist
-                                                    </button>
-                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
+                                                    <form action="{{ route('AddWatchlist', $movie['id']) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        <button class="watchlist-btn" type="submit">
+                                                            <i class="fa fa-plus-circle"></i> Watchlist
+                                                        </button>
+                                                    </form>
+                                                    <a class="info-btn" href="{{ route('MovieDetail', $movie['id'])}}">
                                                         <i class="fa fa-info-circle"></i> Info
                                                     </a>
                                                 </div>
@@ -233,10 +250,13 @@
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
-                                                        <i class="fa fa-plus-circle"></i> Watchlist
-                                                    </button>
-                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
+                                                    <form action="{{ route('AddWatchlist', $movie['id']) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        <button class="watchlist-btn" type="submit">
+                                                            <i class="fa fa-plus-circle"></i> Watchlist
+                                                        </button>
+                                                    </form>
+                                                    <a class="info-btn" href="{{ route('MovieDetail', $movie['id'])}}">
                                                         <i class="fa fa-info-circle"></i> Info
                                                     </a>
                                                 </div>
@@ -284,10 +304,13 @@
                                                     <span>{{ number_format($movie['vote_average'], 1) }}</span>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
-                                                        <i class="fa fa-plus-circle"></i> Watchlist
-                                                    </button>
-                                                    <a class="info-btn" href="/movie-details/{{ $movie['id'] }}">
+                                                    <form action="{{ route('AddWatchlist', $movie['id']) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        <button class="watchlist-btn" type="submit">
+                                                            <i class="fa fa-plus-circle"></i> Watchlist
+                                                        </button>
+                                                    </form>
+                                                    <a class="info-btn" href="{{ route('MovieDetail', $movie['id'])}}">
                                                         <i class="fa fa-info-circle"></i> Info
                                                     </a>
                                                 </div>
