@@ -93,4 +93,12 @@ class ViewController
         $WatchlistMovie->delete();
         return redirect()->back();
     }
+    public function SearchMovie($query) {
+        $searchMovie = $this->apiController->SearchMovie($query);
+        return response()->json($searchMovie);
+    }
+    public function FindMovie($query) {
+        $searchMovie = $this->apiController->SearchMovie($query);
+        return view('Find', compact('searchMovie'))->with('keyword', $query);   
+    }
 }

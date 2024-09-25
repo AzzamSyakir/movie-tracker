@@ -355,6 +355,21 @@
             width: 100%;
         }
     }
+    #dropdownResults {
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    }
+
+    .dropdown-item {
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f0f0f0;
+    }
+
     </style>
 </head>
 <body>
@@ -370,10 +385,13 @@
                 </button>
             </div>
             <div class="navbar-search">
-                <input type="text" placeholder="Search Movies">
-                <button type="button">
+                <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
+                <button type="button" id="searchButton">
                     <i class="fas fa-search"></i>
                 </button>
+                <div id="dropdownResults" class="dropdown-menu" style="display: none;"></div>
+            </div>
+
             </div>
            <div class="watchlist">
                 <i class="fas fa-bookmark"></i>
@@ -423,7 +441,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <h5 class="text-uppercase font-weight-bold">Movie Addict?</h5>
-                <p class="small">Tempat untuk menemukan dan melacak film favoritmu. Selalu update dengan film-film terbaru dan informasi menarik seputar dunia perfilman.</p>
+                <p class="small">A place to find and keep track of your favorite movies. Always stay updated with the latest films and interesting info about the world of cinema.</p>
             </div>
             <div class="col-md-4 mb-3 text-center">
                 <h5 class="text-uppercase font-weight-bold">Follow Me</h5>
@@ -480,5 +498,76 @@
         });
     });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+function searchMovies(query) {
+    if (query.length > 0) {
+        $.ajax({
+            url: '{{ route('SearchMovie', '') }}/' + encodeURIComponent(query),
+            type: 'GET',
+            success: function(data) {
+                $('#dropdownResults').empty();
+                if (data.length > 0) {
+                    $('#dropdownResults').show();
+                    let maxResults = 5;
+                    let count = 0;
+
+                    data.forEach(function(movie) {
+                        if (count < maxResults) {
+                            $('#dropdownResults').append(
+                                '<a class="dropdown-item" href="{{ route('MovieDetail', '') }}/' + movie.id + '">' +
+                                    '<img src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="' + movie.title + '" style="width: 50px; height: auto; margin-right: 10px;">' +
+                                    movie.title + '<br>' +
+                                    '<small>' + movie.overview + '</small>' +
+                                '</a>'
+                            );
+                        }
+                        count++;
+                    });
+
+                    if (data.length > maxResults) {
+                        $('#dropdownResults').append(
+                            '<a href="{{route('FindMovie', '')}}/' + encodeURIComponent(query) + '" class="dropdown-item text-center text-primary">' +
+                                'See all results for "' + query + '"' +
+                            '</a>'
+                        );
+                    }
+
+                } else {
+                    $('#dropdownResults').hide();
+                }
+            }
+        });
+    } else {
+        $('#dropdownResults').hide();
+    }
+}
+
+$(document).ready(function() {
+    let debounceTimeout;
+
+    $('#movieQuery').on('keyup', function() {
+        var query = $(this).val();
+
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function() {
+            searchMovies(query);
+        }, 300);
+    });
+
+    $('#searchButton').on('click', function() {
+        var query = $('#movieQuery').val();
+        searchMovies(query);
+    });
+
+    $(document).click(function(e) {
+        if (!$(e.target).closest('#movieQuery, #dropdownResults').length) {
+            $('#dropdownResults').hide();
+        }
+    });
+});
+
+</script>
+
 </body>
 </html>

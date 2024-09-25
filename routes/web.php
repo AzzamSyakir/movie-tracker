@@ -31,3 +31,6 @@ Route::get('login/facebook/callback', [SocialController::class, 'FacebookCallbac
 Route::get('/watchlist', [ViewController::class, 'GetWatchlist'])->name('GetWatchlist')->middleware(EnsureUserAuthenticated::class);
 Route::post('/add-watchlist/{movieId}', [ViewController::class, 'AddWatchlist'])->name('AddWatchlist')->middleware(EnsureUserAuthenticated::class);
 Route::delete('/delete-watchlist/{movieId}', [ViewController::class, 'DeleteWatchlist'])->name('DeleteWatchlist')->middleware(EnsureUserAuthenticated::class);
+
+Route::get('/search-movie/{query}', [ViewController::class, 'SearchMovie'])->name('SearchMovie');
+Route::get('/find/{query}', [ViewController::class, 'FindMovie'])->name('FindMovie');
