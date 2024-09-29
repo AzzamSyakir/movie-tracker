@@ -34,3 +34,6 @@ Route::delete('/delete-watchlist/{movieId}', [ViewController::class, 'DeleteWatc
 
 Route::get('/search-movie/{query}', [ViewController::class, 'SearchMovie'])->name('SearchMovie');
 Route::get('/find/{query}', [ViewController::class, 'FindMovie'])->name('FindMovie');
+
+Route::get('/account-setting', [ViewController::class, 'AccountSettingView'])->name('AccountSettingView');
+ Route::post('/updateUser', [ViewController::class, 'UpdateUser'])->name('UpdateUser')->middleware(EnsureUserAuthenticated::class);
