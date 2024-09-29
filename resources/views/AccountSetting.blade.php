@@ -269,6 +269,7 @@ h3 {
             successMessage.style.display = 'block';
             setTimeout(() => {
                 successMessage.style.display = 'none';
+                location.reload(); 
             }, time);
         } else if (data.error) {
             const errorTextElement = document.getElementById('error-text');
@@ -281,6 +282,7 @@ h3 {
             errorMessage.style.display = 'block';
             setTimeout(() => {
                 errorMessage.style.display = 'none';
+                location.reload(); 
             }, time);
         }
     })

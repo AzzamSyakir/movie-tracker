@@ -48,7 +48,7 @@
             color: #ffffff;
             border: none;
             padding: 10px;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             font-weight: bold;
             border-radius: 5px;
@@ -60,7 +60,7 @@
         }
 
         .account-dropdown-toggle i {
-            font-size: 16px;
+            font-size: 15px;
             margin-right: 8px;
         }
 
@@ -105,9 +105,11 @@
 
         .navbar {
             position: relative;
-            background-color: #2c3e50;
-            padding: 10px 20px;
             display: flex;
+            justify-content: center;
+            padding: 5px 20px;
+            background-color: #1f1f1f;
+            color: white;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -115,22 +117,10 @@
 
         .navbar-brand {
             color: #ecf0f1;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             text-decoration: none;
             transition: color 0.3s;
-        }
-
-        .navbar-brand:hover {
-            color: #e74c3c;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: center;
-            padding: 5px 20px;
-            background-color: #1f1f1f;
-            color: white;
         }
 
         .navbar-container {
@@ -146,8 +136,28 @@
             align-items: center;
         }
 
+        .navbar-title a {
+            position: relative;
+            color: #fff; 
+            text-decoration: none;
+        }
+        
+        .navbar-title  {
+            margin-right: 10px;
+            border: 2px solid transparent;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .navbar-title:hover {
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
         .logo {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: bold;
             color: white;
             margin-right: 10px;
@@ -171,7 +181,7 @@
             background: none;
             border: none;
             color: #fff;
-            font-size: 20px;
+            font-size: 15px;
             cursor: pointer;
             margin-left: 10px;
             font-weight: bold;
@@ -405,8 +415,8 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
-            <nav class="navbar">
-                <a href="/" class="navbar-brand">Movie Addict</a>
+            <nav class="navbar-title">
+                <a href="/">Movie Addict</a>
             </nav>
 
             <button class="menu-toggle" onclick="toggleMenu()">
@@ -420,7 +430,6 @@
                 </button>
                 <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
             </div>
-
             </div>
            <div class="watchlist">
                 <i class="fas fa-bookmark"></i>
@@ -599,6 +608,12 @@
                 $('#dropdownResults').hide();
             }
         });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const accountName = document.querySelector('.account-name');
+        if (accountName && accountName.textContent.length > 12) {
+            accountName.textContent = accountName.textContent.substring(0, 12);
+        }
     });
 </script>
 </body>
