@@ -35,15 +35,9 @@ class ApiController
             if ($responsePage1->successful() && $responsePage2->successful()) {
                 $dataPage1 = $responsePage1->json('results');
                 $dataPage2 = $responsePage2->json('results');
+                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
 
-                $filteredMoviesPage1 = array_filter($dataPage1, function($movie) {
-                    return !$movie['adult'];
-                });
-                
-                $filteredMoviesPage2 = array_filter($dataPage2, function($movie) {
-                    return !$movie['adult'];
-                });
-
+                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
                 $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
                 $selectedMovies = array_slice($allMovies, 0, 30);
                 return $selectedMovies;
@@ -57,7 +51,6 @@ class ApiController
             throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
         }
     }
-
     public function GetTopRatedMovies(){
         $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
         $randomNumber1 = rand(1, 20);
@@ -66,31 +59,19 @@ class ApiController
             $responsePage1 = Http::get($baseUrl, [
                 'api_key' => $this->apiKey,
                 'page' => $randomNumber1,
-                'include_adult' => false,
-                'certification_country' => 'ID',
-                'certification.lte' => 'PG-13'
             ]);
 
             $responsePage2 = Http::get($baseUrl, [
                 'api_key' => $this->apiKey,
                 'page' => $randomNumber2,
-                'include_adult' => false,
-                'certification_country' => 'ID',
-                'certification.lte' => 'PG-13'
             ]);
 
             if ($responsePage1->successful() && $responsePage2->successful()) {
                 $dataPage1 = $responsePage1->json('results');
                 $dataPage2 = $responsePage2->json('results');
+                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
 
-                $filteredMoviesPage1 = array_filter($dataPage1, function($movie) {
-                    return !$movie['adult'];
-                });
-
-                $filteredMoviesPage2 = array_filter($dataPage2, function($movie) {
-                    return !$movie['adult'];
-                });
-
+                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
                 $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
                 $selectedMovies = array_slice($allMovies, 0, 30);
                 return $selectedMovies;
@@ -104,7 +85,6 @@ class ApiController
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
-
     public function GetNowPlayingMovies(){
         $randomNumber1 = rand(1, 20);
         $randomNumber2 = rand(1, 20);
@@ -125,15 +105,9 @@ class ApiController
             if ($responsePage1->successful() && $responsePage2->successful()) {
                 $dataPage1 = $responsePage1->json('results');
                 $dataPage2 = $responsePage2->json('results');
+                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
 
-                $filteredMoviesPage1 = array_filter($dataPage1, function($movie) {
-                    return !$movie['adult'];
-                });
-
-                $filteredMoviesPage2 = array_filter($dataPage2, function($movie) {
-                    return !$movie['adult'];
-                });
-
+                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
                 $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
                 $selectedMovies = array_slice($allMovies, 0, 30);
                 return $selectedMovies;
@@ -146,6 +120,49 @@ class ApiController
         } catch (\Exception $e) {
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
+    }
+    public function FilterMovieByMpaa($movies) {
+        $certificationArray = [];
+        $movieFiltered = [];
+    
+        if (is_array($movies) && !empty($movies)) {
+            foreach ($movies as $filterMovie) {
+                $movieId = $filterMovie['id'];
+                $movieMpaaRating = Http::get("https://api.themoviedb.org/3/movie/" . $movieId . "/release_dates", [
+                    'api_key' => $this->apiKey,
+                ]);
+    
+                if ($movieMpaaRating->successful()) {
+                    $releaseDates = $movieMpaaRating->json('results');
+    
+                    if (!empty($releaseDates)) {
+                        foreach ($releaseDates as $release) {
+                            if ($release['iso_3166_1'] === 'US') {
+                                $certification = $release['release_dates'][0]['certification'] ?? 'N/A';
+    
+                                if ($certification !== '' && $certification !== 'NC-17' && $certification !== 'R') {
+                                    $certificationArray[]['certification'] = [
+                                        'movie_id' => $filterMovie['id'],
+                                        'certification' => $certification
+                                    ];
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!empty($certificationArray)) {
+            foreach ($certificationArray as $movieCertificate) {
+                foreach ($movies as $movie) {
+                    if ($movie['id'] == $movieCertificate['certification']['movie_id']) {
+                        $movieFiltered [] = $movie;
+                    }
+                }
+            }
+        }
+        return $movieFiltered;
     }
 
     public function GetMoviesByCountry($country)
@@ -193,7 +210,6 @@ class ApiController
             throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
         }
     }
-
     public function getMovieDetails($id)
     {
         try {
@@ -212,7 +228,6 @@ class ApiController
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
-
     public function getMovieVideos($id)
     {
         try {
@@ -231,8 +246,7 @@ class ApiController
             throw new \Exception('Failed to fetch movie videos: ' . $e->getMessage());
         }
     }
-
-        public function SearchMovie($query)
+    public function SearchMovie($query)
     {
         try {
             $response = Http::get("https://api.themoviedb.org/3/search/movie", [
@@ -259,5 +273,5 @@ class ApiController
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
-}
+    }
 
