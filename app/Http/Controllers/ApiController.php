@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Cache;
 use Config;
 use Illuminate\Support\Facades\Http;
 
@@ -16,110 +17,90 @@ class ApiController
 // movie list
     public function getPopularMovies()
     {
-        $baseUrl = 'https://api.themoviedb.org/3/movie/popular';
-        $randomNumber1 = rand(1, 20);
-        $randomNumber2 = rand(1, 20);
-        try {
-            $responsePage1 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber1,
-                'include_adult' => false
-            ]);
+            $baseUrl = 'https://api.themoviedb.org/3/movie/popular';
+            $allMovies = [];
+            $page = rand(1, 20);
 
-            $responsePage2 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber2,
-                'include_adult' => false
-            ]);
+            try {
+                while (count($allMovies) < 30) {
+                    $response = Http::get($baseUrl, [
+                        'api_key' => $this->apiKey,
+                        'page' => $page,
+                        'include_adult' => false
+                    ]);
 
-            if ($responsePage1->successful() && $responsePage2->successful()) {
-                $dataPage1 = $responsePage1->json('results');
-                $dataPage2 = $responsePage2->json('results');
-                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
-
-                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
-                $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
-                $selectedMovies = array_slice($allMovies, 0, 30);
-                return $selectedMovies;
-            } else {
-                $errorMessagePage1 = $responsePage1->json('status_message') ?? 'No error message provided';
-                $errorMessagePage2 = $responsePage2->json('status_message') ?? 'No error message provided';
-
-                throw new \Exception('API response error. Page 1: ' . $errorMessagePage1 . ' Page 2: ' . $errorMessagePage2);
+                    if ($response->successful()) {
+                        $data = $response->json('results');
+                        $filteredMovies = $this->FilterMovieByMpaa($data);
+                        $allMovies = array_merge($allMovies, $filteredMovies);
+                        $page++;
+                    } else {
+                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
+                        throw new \Exception('API response error: ' . $errorMessage);
+                    }
+                }
+                return array_slice($allMovies, 0, 30);
+            } catch (\Exception $e) {
+                throw new \Exception('Failed to fetch Popular movies: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
-        }
     }
+
     public function GetTopRatedMovies(){
-        $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
-        $randomNumber1 = rand(1, 20);
-        $randomNumber2 = rand(1, 20);
-        try {
-            $responsePage1 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber1,
-            ]);
-
-            $responsePage2 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber2,
-            ]);
-
-            if ($responsePage1->successful() && $responsePage2->successful()) {
-                $dataPage1 = $responsePage1->json('results');
-                $dataPage2 = $responsePage2->json('results');
-                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
-
-                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
-                $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
-                $selectedMovies = array_slice($allMovies, 0, 30);
-                return $selectedMovies;
-            } else {
-                $errorMessagePage1 = $responsePage1->json('status_message') ?? 'No error message provided';
-                $errorMessagePage2 = $responsePage2->json('status_message') ?? 'No error message provided';
-
-                throw new \Exception('API response error. Page 1: ' . $errorMessagePage1 . ' Page 2: ' . $errorMessagePage2);
+            $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
+            $allMovies = [];
+            $page = rand(1, 20);
+    
+            try {
+                while (count($allMovies) < 30) {
+                    $response = Http::get($baseUrl, [
+                        'api_key' => $this->apiKey,
+                        'page' => $page,
+                        'include_adult' => false
+                    ]);
+    
+                    if ($response->successful()) {
+                        $data = $response->json('results');
+                        $filteredMovies = $this->FilterMovieByMpaa($data);
+                        $allMovies = array_merge($allMovies, $filteredMovies);
+                        $page++;
+                    } else {
+                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
+                        throw new \Exception('API response error: ' . $errorMessage);
+                    }
+                }
+                return array_slice($allMovies, 0, 30);
+            } catch (\Exception $e) {
+                throw new \Exception('Failed to fetch TopRated movies: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
-        }
     }
     public function GetNowPlayingMovies(){
-        $randomNumber1 = rand(1, 20);
-        $randomNumber2 = rand(1, 20);
-        $baseUrl = 'https://api.themoviedb.org/3/movie/now_playing';
-        try {
-            $responsePage1 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber1,
-                'include_adult' => false
-            ]);
-
-            $responsePage2 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
-                'page' => $randomNumber2,
-                'include_adult' => false
-            ]);
-
-            if ($responsePage1->successful() && $responsePage2->successful()) {
-                $dataPage1 = $responsePage1->json('results');
-                $dataPage2 = $responsePage2->json('results');
-                $filteredMoviesPage1 = $this->FilterMovieByMpaa($dataPage1);
-
-                $filteredMoviesPage2 = $this->FilterMovieByMpaa($dataPage2);
-                $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
-                $selectedMovies = array_slice($allMovies, 0, 30);
-                return $selectedMovies;
-            } else {
-                $errorMessagePage1 = $responsePage1->json('status_message') ?? 'No error message provided';
-                $errorMessagePage2 = $responsePage2->json('status_message') ?? 'No error message provided';
-
-                throw new \Exception('API response error. Page 1: ' . $errorMessagePage1 . ' Page 2: ' . $errorMessagePage2);
+            $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
+            $allMovies = [];
+            $page = rand(1, 20);
+    
+            try {
+                while (count($allMovies) < 30) {
+                    $response = Http::get($baseUrl, [
+                        'api_key' => $this->apiKey,
+                        'page' => $page,
+                        'include_adult' => false
+                    ]);
+    
+                    if ($response->successful()) {
+                        $data = $response->json('results');
+                        $filteredMovies = $this->FilterMovieByMpaa($data);
+                        $allMovies = array_merge($allMovies, $filteredMovies);
+                        $page++;
+                    } else {
+                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
+                        throw new \Exception('API response error: ' . $errorMessage);
+                    }
+                }
+    
+                return array_slice($allMovies, 0, 30);
+            } catch (\Exception $e) {
+                throw new \Exception('Failed to fetch nowPlaying movies: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
-        }
     }
     public function FilterMovieByMpaa($movies) {
         $certificationArray = [];
@@ -140,7 +121,7 @@ class ApiController
                             if ($release['iso_3166_1'] === 'US') {
                                 $certification = $release['release_dates'][0]['certification'] ?? 'N/A';
     
-                                if ($certification !== '' && $certification !== 'NC-17' && $certification !== 'R') {
+                                if ($certification !== '' && $certification !== 'NC-17' && $certification !== 'R' && $certification !== '' && $certification !== 'NR') {
                                     $certificationArray[]['certification'] = [
                                         'movie_id' => $filterMovie['id'],
                                         'certification' => $certification
@@ -273,5 +254,6 @@ class ApiController
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
-    }
+
+}
 

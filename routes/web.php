@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\Auth\AuthController;
@@ -7,6 +8,9 @@ use App\Http\Middleware\EnsureUserAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ViewController::class, 'homePage'])->name('HomeView');
+Route::get('/popular-movies', [ApiController::class, 'getPopularMovies'])->name('getPopularMovies');
+Route::get('/nowPlaying-movies', [ApiController::class, 'getNowPlayingMovies'])->name('getNowPlayingMovies');
+Route::get('/topRated-movies', [ApiController::class, 'getTopRatedMovies'])->name('getTopRatedMovies');
 
 Route::get('/movie-details/{movieId}', [ViewController::class, 'MovieDetail'])->name('MovieDetail');
 

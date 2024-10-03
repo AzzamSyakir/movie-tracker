@@ -9,6 +9,8 @@ use Hash;
 use Illuminate\Http\Request;
 use Str;
 use Validator;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
 class ViewController
 {
     protected $apiController;
@@ -16,17 +18,25 @@ class ViewController
     {
         $this->apiController = new ApiController();
     }
-    public function homePage()
-    {
-        $popularMovies = $this->apiController->getPopularMovies();
-        $nowPlayingMovies = $this->apiController->GetNowPlayingMovies();
-        $topRatedMovies = $this->apiController->GetTopRatedMovies();
-        if(Auth::check()) {
-            $userAuthenticate = true;
-            return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies', 'userAuthenticate'));
+    public function homepage()  {
+        $client = new Client(['base_uri' => 'http://nginx/']);
 
-        }
-        return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
+        $promises = [
+            'popularMovies' => $client->getAsync('popular-movies'),
+            'nowPlayingMovies'   => $client->getAsync('nowPlaying-movies'),
+            'topRatedMovies'  => $client->getAsync('topRated-movies'),
+        ];
+    $results = Promise\Utils::unwrap($promises);
+
+    $popularMovies = json_decode($results['popularMovies']->getBody()->getContents(), true);
+    $nowPlayingMovies = json_decode($results['nowPlayingMovies']->getBody()->getContents(), true);
+    $topRatedMovies = json_decode($results['topRatedMovies']->getBody()->getContents(), true);
+    if (Auth::check()) {
+        $userAuthenticate = true;
+        return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies', 'userAuthenticate'));
+    }
+
+    return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
     }
     public function movieDetail($movieId)
     {
