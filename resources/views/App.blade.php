@@ -424,10 +424,10 @@
                 </button>
             </div>
             <div class="navbar-search">
-                <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
-                <button type="button" id="searchButton">
-                    <i class="fas fa-search"></i>
-                </button>
+            <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
+            <button type="button" id="searchButton" onclick="redirectToFindMovies()">
+                <i class="fas fa-search"></i>
+            </button>
                 <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
             </div>
             </div>
@@ -542,6 +542,17 @@
             }
         });
     });
+    // redirectFindMovies Functionality
+
+    function redirectToFindMovies() {
+        var query = document.getElementById('movieQuery').value;
+
+        if (query.length > 0) {
+            window.location.href = '{{ route('FindMovie', '') }}/' + encodeURIComponent(query);
+        } else {
+            alert("Please enter a movie name");
+        }
+    }
 
     // Movie Search Functionality
     function searchMovies(query) {

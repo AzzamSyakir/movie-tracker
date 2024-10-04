@@ -113,6 +113,10 @@ class ViewController
     }
     public function FindMovie($query) {
         $searchMovie = $this->apiController->SearchMovie($query);
+        if ($searchMovie == null) {
+            $searchMovie = [];
+            return view('Find', compact('searchMovie'))->with('keyword',  $query);
+        }
         return view('Find', compact('searchMovie'))->with('keyword', $query);   
     }
     public function updateUser(Request $request) {

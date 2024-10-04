@@ -238,11 +238,7 @@ class ApiController
 
             if ($response->successful()) {
                 $movies = $response->json('results');
-
-                $filteredMovies = array_filter($movies, function($movie) {
-                    return !$movie['adult'];
-                });
-
+                $filteredMovies = $this->FilterMovieByMpaa($movies);
                 return $filteredMovies;
             } else {
                 $responseData = json_decode($response->body(), true);
