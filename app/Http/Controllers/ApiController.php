@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Cache;
 use Config;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Promise;
+
 
 class ApiController 
 {
@@ -15,93 +17,121 @@ class ApiController
         $this->apiKey = config('api.key');
     }
 // movie list
-    public function getPopularMovies()
-    {
+    
+        public function getPopularMovies()
+        {
             $baseUrl = 'https://api.themoviedb.org/3/movie/popular';
             $allMovies = [];
-            $page = rand(1, 20);
+            $promises = [];
+            $client = new \GuzzleHttp\Client();
+            $randomPages = range(1, 20);
+            shuffle($randomPages);
 
-            try {
-                while (count($allMovies) < 30) {
-                    $response = Http::get($baseUrl, [
+            foreach (array_slice($randomPages, 0, 5) as $page) {
+                $promises[] = $client->getAsync($baseUrl, [
+                    'query' => [
                         'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false
-                    ]);
+                    ]
+                ]);
+            }
 
-                    if ($response->successful()) {
-                        $data = $response->json('results');
-                        $filteredMovies = $this->FilterMovieByMpaa($data);
-                        $allMovies = array_merge($allMovies, $filteredMovies);
-                        $page++;
-                    } else {
-                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
-                        throw new \Exception('API response error: ' . $errorMessage);
+            try {
+                $responses = Promise\Utils::settle($promises)->wait();
+
+                foreach ($responses as $response) {
+                    $data = json_decode($response['value']->getBody()->getContents(), true)['results'];
+                    $filteredMovies = $this->FilterMovieByMpaa($data);
+                    $allMovies = array_merge($allMovies, $filteredMovies);
+
+                    if (count($allMovies) >= 30) {
+                        break;
                     }
                 }
+
                 return array_slice($allMovies, 0, 30);
+
             } catch (\Exception $e) {
                 throw new \Exception('Failed to fetch Popular movies: ' . $e->getMessage());
             }
-    }
+        }
+        public function GetTopRatedMovies()
+        {
+            $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
+            $allMovies = [];
+            $promises = [];
+            $client = new \GuzzleHttp\Client();
+            $randomPages = range(1, 20);
+            shuffle($randomPages);
 
-    public function GetTopRatedMovies(){
-            $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
-            $allMovies = [];
-            $page = rand(1, 20);
-    
-            try {
-                while (count($allMovies) < 30) {
-                    $response = Http::get($baseUrl, [
+            foreach (array_slice($randomPages, 0, 5) as $page) {
+                $promises[] = $client->getAsync($baseUrl, [
+                    'query' => [
                         'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false
-                    ]);
-    
-                    if ($response->successful()) {
-                        $data = $response->json('results');
-                        $filteredMovies = $this->FilterMovieByMpaa($data);
-                        $allMovies = array_merge($allMovies, $filteredMovies);
-                        $page++;
-                    } else {
-                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
-                        throw new \Exception('API response error: ' . $errorMessage);
+                    ]
+                ]);
+            }
+
+            try {
+                $responses = Promise\Utils::unwrap($promises);
+
+                foreach ($responses as $response) {
+                    $data = json_decode($response->getBody()->getContents(), true)['results'];
+                    $filteredMovies = $this->FilterMovieByMpaa($data);
+                    $allMovies = array_merge($allMovies, $filteredMovies);
+
+                    if (count($allMovies) >= 30) {
+                        break;
                     }
                 }
+
                 return array_slice($allMovies, 0, 30);
+
             } catch (\Exception $e) {
-                throw new \Exception('Failed to fetch TopRated movies: ' . $e->getMessage());
+                throw new \Exception('Failed to fetch Top Rated movies: ' . $e->getMessage());
             }
-    }
-    public function GetNowPlayingMovies(){
-            $baseUrl = 'https://api.themoviedb.org/3/movie/top_rated';
+        }
+        public function GetNowPlayingMovies()
+        {
+            $baseUrl = 'https://api.themoviedb.org/3/movie/now_playing';
             $allMovies = [];
-            $page = rand(1, 20);
-    
-            try {
-                while (count($allMovies) < 30) {
-                    $response = Http::get($baseUrl, [
+            $promises = [];
+            $client = new \GuzzleHttp\Client();
+            $randomPages = range(1, 20);
+            shuffle($randomPages);
+
+            foreach (array_slice($randomPages, 0, 5) as $page) {
+                $promises[] = $client->getAsync($baseUrl, [
+                    'query' => [
                         'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false
-                    ]);
-    
-                    if ($response->successful()) {
-                        $data = $response->json('results');
-                        $filteredMovies = $this->FilterMovieByMpaa($data);
-                        $allMovies = array_merge($allMovies, $filteredMovies);
-                        $page++;
-                    } else {
-                        $errorMessage = $response->json('status_message') ?? 'No error message provided';
-                        throw new \Exception('API response error: ' . $errorMessage);
+                    ]
+                ]);
+            }
+
+            try {
+                $responses = Promise\Utils::unwrap($promises);
+
+                foreach ($responses as $response) {
+                    $data = json_decode($response->getBody()->getContents(), true)['results'];
+                    $filteredMovies = $this->FilterMovieByMpaa($data);
+                    $allMovies = array_merge($allMovies, $filteredMovies);
+
+                    if (count($allMovies) >= 30) {
+                        break;
                     }
                 }
-    
+
                 return array_slice($allMovies, 0, 30);
+
             } catch (\Exception $e) {
-                throw new \Exception('Failed to fetch nowPlaying movies: ' . $e->getMessage());
+                throw new \Exception('Failed to fetch Now Playing movies: ' . $e->getMessage());
             }
-    }
+        }
     public function FilterMovieByMpaa($movies) {
         $certificationArray = [];
         $movieFiltered = [];
@@ -145,7 +175,6 @@ class ApiController
         }
         return $movieFiltered;
     }
-
     public function GetMoviesByCountry($country)
     {
         $baseUrl = 'https://api.themoviedb.org/3/discover/movie';

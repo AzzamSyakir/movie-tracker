@@ -18,26 +18,44 @@ class ViewController
     {
         $this->apiController = new ApiController();
     }
-    public function homepage()  {
+    public function homepage() {
         $client = new Client(['base_uri' => 'http://nginx/']);
-
+    
         $promises = [
             'popularMovies' => $client->getAsync('popular-movies'),
-            'nowPlayingMovies'   => $client->getAsync('nowPlaying-movies'),
-            'topRatedMovies'  => $client->getAsync('topRated-movies'),
+            'nowPlayingMovies' => $client->getAsync('nowPlaying-movies'),
+            'topRatedMovies' => $client->getAsync('topRated-movies'),
         ];
-    $results = Promise\Utils::unwrap($promises);
-
-    $popularMovies = json_decode($results['popularMovies']->getBody()->getContents(), true);
-    $nowPlayingMovies = json_decode($results['nowPlayingMovies']->getBody()->getContents(), true);
-    $topRatedMovies = json_decode($results['topRatedMovies']->getBody()->getContents(), true);
-    if (Auth::check()) {
-        $userAuthenticate = true;
-        return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies', 'userAuthenticate'));
+    
+        $results = Promise\Utils::settle($promises)->wait();
+    
+        // Pastikan untuk memeriksa status fulfilled
+        if ($results['popularMovies']['state'] === 'fulfilled') {
+            $popularMovies = json_decode($results['popularMovies']['value']->getBody()->getContents(), true);
+        } else {
+            throw new \Exception('Failed to fetch popular movies');
+        }
+    
+        if ($results['nowPlayingMovies']['state'] === 'fulfilled') {
+            $nowPlayingMovies = json_decode($results['nowPlayingMovies']['value']->getBody()->getContents(), true);
+        } else {
+            throw new \Exception('Failed to fetch now playing movies');
+        }
+    
+        if ($results['topRatedMovies']['state'] === 'fulfilled') {
+            $topRatedMovies = json_decode($results['topRatedMovies']['value']->getBody()->getContents(), true);
+        } else {
+            throw new \Exception('Failed to fetch top rated movies');
+        }
+    
+        if (Auth::check()) {
+            $userAuthenticate = true;
+            return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies', 'userAuthenticate'));
+        }
+    
+        return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
     }
-
-    return view('Home', compact('popularMovies', 'nowPlayingMovies', 'topRatedMovies'));
-    }
+    
     public function movieDetail($movieId)
     {
         $movieVideos = $this->apiController->getMovieVideos($movieId);
