@@ -163,7 +163,6 @@ footer {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: 10px;
 }
 
 .navbar-search input {
@@ -181,7 +180,7 @@ footer {
     background-color: transparent;
     border: none;
     color: #808080;
-    font-size: 20px;
+    font-size: 15px;
     cursor: pointer;
     transition: color 0.3s;
 }
@@ -333,6 +332,7 @@ button:focus {
 
 /* Laptop (1024px) */
 @media (max-width: 1024px) {
+    /* navbar css section */
     .navbar-container {
         max-width: 90%;
     }
@@ -340,6 +340,7 @@ button:focus {
     .navbar-search {
         width: 100%;
         margin-top: 10px;
+        margin-bottom: 5px;
     }
 
     .navbar-search input {
@@ -349,6 +350,7 @@ button:focus {
     .navbar-brand {
         font-size: 16px;
     }
+    /* button css section */
 
     .sign-in button {
         font-size: 14px;
@@ -365,16 +367,36 @@ button:focus {
         padding: 0 15px;
     }
 
+     .navbar-title {
+        order: 2;
+        margin-right: auto;
+    }
+
+    .menu-text {
+        display: none;
+    }
+
+    .watchlist {
+        display: none;
+    }
+
     .navbar-search {
         margin-top: 10px;
         width: 100%;
     }
 
+    .navbar-search button {
+        margin-bottom: 8px;
+    }
+
     .navbar-search input {
         font-size: 12px;
+        margin-bottom: 10px;
     }
 
     .menu-toggle {
+        order: 1;
+        margin-left: auto;
         font-size: 14px;
     }
 
