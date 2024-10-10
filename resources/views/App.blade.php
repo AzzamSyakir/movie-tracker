@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 @yield(section: 'custom-css')
 <style>
-html, body {
+    html, body {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -35,12 +35,13 @@ footer {
     padding: 20px;
     text-align: center;
 }
+
 /* Navbar */
 .navbar {
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 5px 5px;
+    padding: 5px;
     background-color: #1f1f1f;
     color: white;
     align-items: center;
@@ -52,7 +53,6 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap;
     width: 100%;
     max-width: 1200px;
 }
@@ -130,13 +130,8 @@ footer {
     margin-right: 8px;
 }
 
-.account-name {
-    margin-left: 5px;
-}
-
 .account-dropdown-toggle:hover {
     background-color: #333;
-    color: #ffffff;
 }
 
 .account-dropdown-menu {
@@ -222,7 +217,6 @@ footer {
     margin-left: 10px;
     transition: background-color 0.3s;
 }
-
 .watchlist button {
     background-color: transparent;
     border: 2px solid transparent;
@@ -274,7 +268,6 @@ footer {
 
 .menu-close:hover {
     background-color: #ccc;
-    color: #000;
 }
 
 .navbar-menu ul {
@@ -291,10 +284,6 @@ footer {
     font-weight: bold;
 }
 
-/* Buttons */
-button:focus {
-    outline: none;
-}
 /* Dropdown Results */
 #dropdownResults {
     position: absolute;
@@ -314,23 +303,16 @@ button:focus {
 .dropdown-item:hover {
     background-color: transparent;
 }
+
+/* Buttons */
+button:focus {
+    outline: none;
+}
+
 /* Media Queries */
 
 /* Laptop L (1440px) */
 @media (max-width: 1440px) {
-
-    .navbar {
-        max-width: 100%;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .navbar-container {
-        max-width: 100%;
-        flex-direction: row;
-        align-items: center;
-    }
-
     .navbar-search input {
         font-size: 14px;
     }
@@ -340,56 +322,19 @@ button:focus {
     }
 
     .sign-in button {
-        background-color: transparent;
-        border: 2px solid transparent;
-        color: #ffffff;
-        padding: 5px 8px;
-        cursor: pointer;
-        font-size: 15px;
-        border-radius: 5px;
-        transition: background-color 0.3s, color 0.3s;
-        font-weight: bold;
+        font-size: 14px;
         white-space: nowrap;
     }
 
-    .sign-in button:hover {
-        background-color: #333;
-    }
-
-    .watchlist {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-        padding: 5px 8px;
-        border-radius: 4px;
-        margin-left: 5px;
-        transition: background-color 0.3s;
-    }
-
     .watchlist button {
-        background-color: transparent;
-        border: 2px solid transparent;
         font-size: 15px;
-        color: #ffffff;
-        padding: 5px 8px;
-        cursor: pointer;
-        border-radius: 4px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .watchlist:hover {
-        background-color: #333;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 }
-
 
 /* Laptop (1024px) */
 @media (max-width: 1024px) {
     .navbar-container {
         max-width: 90%;
-        flex-direction: row;
-        align-items: center;
     }
 
     .navbar-search {
@@ -405,15 +350,18 @@ button:focus {
         font-size: 16px;
     }
 
+    .sign-in button {
+        font-size: 14px;
+    }
+
     .watchlist button {
-        font-size: 12px;
+        font-size: 15px;
     }
 }
 
 /* Tablet (768px) */
 @media (max-width: 768px) {
     .navbar-container {
-        max-width: 100%;
         padding: 0 15px;
     }
 
@@ -424,7 +372,6 @@ button:focus {
 
     .navbar-search input {
         font-size: 12px;
-        padding: 5px 10px;
     }
 
     .menu-toggle {
@@ -454,14 +401,8 @@ button:focus {
         padding: 0 10px;
     }
 
-    .navbar-search {
-        margin-top: 10px;
-        width: 100%;
-    }
-
     .navbar-search input {
         font-size: 11px;
-        padding: 5px;
     }
 
     .menu-toggle {
@@ -491,14 +432,8 @@ button:focus {
         padding: 0 8px;
     }
 
-    .navbar-search {
-        margin-top: 10px;
-        width: 100%;
-    }
-
     .navbar-search input {
         font-size: 10px;
-        padding: 5px;
     }
 
     .menu-toggle {
@@ -528,14 +463,8 @@ button:focus {
         padding: 0 5px;
     }
 
-    .navbar-search {
-        margin-top: 10px;
-        width: 100%;
-    }
-
     .navbar-search input {
         font-size: 9px;
-        padding: 5px;
     }
 
     .menu-toggle {
