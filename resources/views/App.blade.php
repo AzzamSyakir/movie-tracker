@@ -491,7 +491,12 @@ button:focus {
     }
 
     .navbar-brand {
-        font-size: 11px;
+        font-size: 15px;
+        padding: 0;
+        margin-top: 12px;
+    }
+    #searchIcon {
+        margin-bottom: 48px;
     }
 }
 
@@ -522,7 +527,7 @@ button:focus {
     }
 
     .navbar-brand {
-        font-size: 10px;
+        font-size: 15px;
     }
 }
 </style>
