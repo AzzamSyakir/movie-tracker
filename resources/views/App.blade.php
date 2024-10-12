@@ -66,7 +66,6 @@ footer {
 .navbar-brand {
     display: flex;
     align-items: center;
-    font-size: 20px;
 }
 
 .navbar-title {
@@ -308,16 +307,16 @@ button:focus {
     outline: none;
 }
 
+#closeIcon {
+        display: none;
+    }
+
 /* Media Queries */
 
 /* Laptop L (1440px) */
 @media (max-width: 1440px) {
     .navbar-search input {
         font-size: 14px;
-    }
-
-    .navbar-brand {
-        font-size: 15px;
     }
 
     .sign-in button {
@@ -336,20 +335,10 @@ button:focus {
     .navbar-container {
         max-width: 90%;
     }
-
-    .navbar-search {
-        width: 100%;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
-
     .navbar-search input {
         font-size: 13px;
     }
 
-    .navbar-brand {
-        font-size: 16px;
-    }
     /* button css section */
 
     .sign-in button {
@@ -363,10 +352,6 @@ button:focus {
 
 /* Tablet (768px) */
 @media (max-width: 768px) {
-    .navbar-container {
-        padding: 0 15px;
-    }
-
      .navbar-title {
         order: 2;
         margin-right: auto;
@@ -383,10 +368,6 @@ button:focus {
     .navbar-search {
         margin-top: 10px;
         width: 100%;
-    }
-
-    .navbar-search button {
-        margin-bottom: 8px;
     }
 
     .navbar-search input {
@@ -409,27 +390,64 @@ button:focus {
         font-size: 11px;
         padding: 8px;
     }
+    .navbar-search button {
+        margin-bottom: 10px;
+    }
+}
 
-    .navbar-brand {
-        font-size: 14px;
+
+@media (max-width: 599px) {
+    .navbar-search input {
+        display: none;
+    }
+
+    .navbar-search.active {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 60px;
+        z-index: 1000;
+        background-color: white;
+        padding: 0;
+        box-sizing: border-box;
+        margin-top: 0;
+        }
+
+    .navbar-search input {
+        width: calc(100% - 40px);
+        height: 100%;
+        border: none;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .navbar-search.active #closeIcon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1001;
+        height: 38px;
+    }
+    #searchIcon {
+        display: block;
+        position: absolute;
+        z-index: 1001;
+    }
+    .navbar-search.active #searchIcon {
+        display: none;
     }
 }
 
 /* Mobile L (425px) */
 @media (max-width: 425px) {
     .navbar-container {
-        flex-direction: column;
-        align-items: flex-start;
         padding: 0 10px;
     }
-
-    .navbar-search input {
-        font-size: 11px;
+    .navbar-search button {
+        margin-bottom: 10px;
     }
-
-    .menu-toggle {
-        font-size: 12px;
-    }
+   
 
     .account-dropdown-toggle {
         padding: 5px;
@@ -523,8 +541,11 @@ button:focus {
             </div>
             <div class="navbar-search">
             <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
-            <button type="button" id="searchButton" onclick="redirectToFindMovies()">
+            <button type="SearchIcon" id="searchIcon">
                 <i class="fas fa-search"></i>
+            </button>
+            <button type="CloseIcon" id="closeIcon">
+                <i class="fas fa-times"></i>
             </button>
                 <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
             </div>
@@ -614,115 +635,155 @@ button:focus {
 
 @yield(section: 'custom-js')
 <script>
-    // Menu Toggle Function
-    function toggleMenu() {
-        const navbarMenu = document.getElementById('navbar-menu');
-        navbarMenu.classList.toggle('active');
-    }
-
-    // Dropdown Menu Functionality
     document.addEventListener('DOMContentLoaded', function() {
+        const searchButton = document.getElementById('searchButton');
+        const searchInput = document.getElementById('movieQuery');
+        const navbarSearch = document.querySelector('.navbar-search');
+        const searchIcon = document.getElementById('searchIcon');
+        const closeIcon = document.getElementById('closeIcon');
         const dropdownToggle = document.querySelector('.account-dropdown-toggle');
         const dropdownMenu = document.querySelector('.account-dropdown-menu');
         const accountName = document.querySelector('.account-name');
-        
-        if (accountName && accountName.textContent.length > 13) {
-            accountName.textContent = accountName.textContent.substring(0, 14);
+
+        function openSearch() {
+            if (window.innerWidth <= 599) {
+                navbarSearch.classList.add('active');
+                searchInput.style.display = 'block';
+                closeIcon.style.display = 'block';
+                searchIcon.style.display = 'none';
+                searchInput.focus();
+            } else {
+                redirectToFindMovies();
+            }
         }
 
-        dropdownToggle.addEventListener('click', function() {
-            dropdownMenu.classList.toggle('show');
-        });
+        function closeSearch() {
+            if (window.innerWidth <= 599) {
+                navbarSearch.classList.remove('active');
+                searchInput.style.display = 'none';
+                closeIcon.style.display = 'none';
+                searchIcon.style.display = 'block';
+            }
+        }
 
-        document.addEventListener('click', function(event) {
-            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.remove('show');
+        if (searchIcon) {
+        searchIcon.addEventListener('click', openSearch);
+        }
+
+        if (closeIcon) {
+            closeIcon.addEventListener('click', closeSearch);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 599 && !navbarSearch.contains(e.target)) {
+                closeSearch();
             }
         });
-    });
-    // redirectFindMovies Functionality
 
-    function redirectToFindMovies() {
-        var query = document.getElementById('movieQuery').value;
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 599) {
+                    searchInput.style.display = 'block';
+                    closeIcon.style.display = 'none';
+                    searchIcon.style.display = 'block';
+                } else {
+                    searchInput.style.display = 'none';
+                    closeIcon.style.display = 'none';
+                    searchIcon.style.display = 'block';  
+                        }
+            });
 
-        if (query.length > 0) {
-            window.location.href = '{{ route('FindMovie', '') }}/' + encodeURIComponent(query);
-        } else {
-            alert("Please enter a movie name");
+
+        if (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
         }
-    }
 
-    // Movie Search Functionality
-    function searchMovies(query) {
-        if (query.length > 0) {
-            $.ajax({
-                url: '{{ route('SearchMovie', '') }}/' + encodeURIComponent(query),
-                type: 'GET',
-                success: function(data) {
-                    $('#dropdownResults').empty();
-                    if (data.length > 0) {
-                        $('#dropdownResults').show();
-                        let maxResults = 5;
-                        let count = 0;
+        if (accountName && accountName.textContent.length > 13) {
+            accountName.textContent = accountName.textContent.substring(0, 13);
+        }
 
-                        data.forEach(function(movie) {
-                            if (count < maxResults) {
-                                $('#dropdownResults').append(
-                                    '<a class="dropdown-item" href="{{ route('MovieDetail', '') }}/' + movie.id + '">' +
+        function redirectToFindMovies() {
+            var query = document.getElementById('movieQuery').value;
+
+            if (query.length > 0) {
+                window.location.href = '{{ route('FindMovie', '') }}/' + encodeURIComponent(query);
+            } else {
+                alert("Please enter a movie name");
+            }
+        }
+
+        function searchMovies(query) {
+            if (query.length > 0) {
+                $.ajax({
+                    url: '{{ route('SearchMovie', '') }}/' + encodeURIComponent(query),
+                    type: 'GET',
+                    success: function(data) {
+                        $('#dropdownResults').empty();
+                        if (data.length > 0) {
+                            $('#dropdownResults').show();
+                            let maxResults = 5;
+                            let count = 0;
+
+                            data.forEach(function(movie) {
+                                if (count < maxResults) {
+                                    $('#dropdownResults').append(
+                                        '<a class="dropdown-item" href="{{ route('MovieDetail', '') }}/' + movie.id + '">' +
                                         '<img src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" alt="' + movie.title + '" style="width: 50px; height: auto; margin-right: 10px;">' +
                                         movie.title + '<br>' +
                                         '<small class="search-dropdown-movie-overview">' + movie.overview + '</small>' +
+                                        '</a>'
+                                    );
+                                }
+                                count++;
+                            });
+
+                            if (data.length > maxResults) {
+                                $('#dropdownResults').append(
+                                    '<a href="{{route('FindMovie', '')}}/' + encodeURIComponent(query) + '" class="dropdown-item text-center text-primary">' +
+                                    'See all results for "' + query + '"' +
                                     '</a>'
                                 );
                             }
-                            count++;
-                        });
-
-                        if (data.length > maxResults) {
-                            $('#dropdownResults').append(
-                                '<a href="{{route('FindMovie', '')}}/' + encodeURIComponent(query) + '" class="dropdown-item text-center text-primary">' +
-                                    'See all results for "' + query + '"' +
-                                '</a>'
-                            );
+                        } else {
+                            $('#dropdownResults').hide();
                         }
-                    } else {
-                        $('#dropdownResults').hide();
                     }
-                }
-            });
-        } else {
-            $('#dropdownResults').hide();
-        }
-    }
-
-    $(document).ready(function() {
-        let debounceTimeout;
-
-        $('#movieQuery').on('keyup', function() {
-            var query = $(this).val();
-
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(function() {
-                searchMovies(query);
-            }, 300);
-        });
-
-        $('#searchButton').on('click', function() {
-            var query = $('#movieQuery').val();
-            searchMovies(query);
-        });
-
-        $(document).click(function(e) {
-            if (!$(e.target).closest('#movieQuery, #dropdownResults').length) {
+                });
+            } else {
                 $('#dropdownResults').hide();
             }
-        });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const accountName = document.querySelector('.account-name');
-        if (accountName && accountName.textContent.length > 12) {
-            accountName.textContent = accountName.textContent.substring(0, 12);
         }
+
+        $(document).ready(function() {
+            let debounceTimeout;
+
+            $('#movieQuery').on('keyup', function() {
+                var query = $(this).val();
+
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function() {
+                    searchMovies(query);
+                }, 300);
+            });
+
+            $('#searchButton').on('click', function() {
+                var query = $('#movieQuery').val();
+                searchMovies(query);
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('#movieQuery, #dropdownResults').length) {
+                    $('#dropdownResults').hide();
+                }
+            });
+        });
     });
 </script>
 </body>
