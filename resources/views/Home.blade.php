@@ -137,10 +137,69 @@
         .carousel-control-next.disabled:hover {
             background-color: rgba(128, 128, 128, 0.1);
         }
+    @media (max-width: 425px) {
+        .carousel-item .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: start;
+        margin: 0;
+        padding: 0;
+    }
+    .carousel-item .movie-card {
+        flex: 0 0 auto;
+        width: 100%;
+        display: inline-block;
+        }
+    .carousel-control-prev, .carousel-control-next {
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
     </style>
 @endsection
 @section('custom-js')
         <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                adjustCarouselItems();
+                window.addEventListener('resize', adjustCarouselItems);
+            });
+            function adjustCarouselItems() {
+                const screenWidth = window.innerWidth;
+                let itemsPerSlide;
+
+                const carouselItems = document.querySelectorAll('.carousel .carousel-item');
+
+                carouselItems.forEach((item) => {
+                    const movies = Array.from(item.querySelectorAll('.movie-card'));
+                    movies.forEach((movie, index) => {
+                        movies.forEach((movie, index) => {
+                            if (screenWidth <= 320) {
+                                movie.style.width = '110px';
+                                itemsPerSlide = 2;
+                            } 
+                            else if (screenWidth <= 375) {
+                                movie.style.width = '80px';
+                                itemsPerSlide = 3;
+                            }
+                            else if (screenWidth <= 425) {
+                                movie.style.width = '100px';
+                                itemsPerSlide = 3;
+                            }
+                            else {
+                                movie.style.width = '';
+                                itemsPerSlide = 6;
+                            }
+                        });
+
+                        movie.style.display = index < itemsPerSlide ? 'block' : 'none';
+                    });
+                });
+            }
+
             $(document).ready(function () {
                 function updateCarouselControls(carouselId) {
                     var carousel = $(carouselId);
