@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $movieDetails['title'] }}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+@extends('App')
+
+@section('title', $movieDetails['title'])
+@section('custom-css')
     <style>
         body {
             background-color: #f4f4f4;
@@ -94,9 +90,10 @@
             background-color: #0056b3;
         }
     </style>
-</head>
-<body>
-@include('Navbar')
+@endsection
+@section('custom-js')
+@endsection
+@section('content')
     <div class="container movie-detail">
         <div class="movie-header @if(!isset($movieVideos) || count($movieVideos) == 0) no-trailer @endif">
             <img class="movie-poster" src="https://image.tmdb.org/t/p/w500{{ $movieDetails['poster_path'] }}" alt="{{ $movieDetails['title'] }}">
@@ -185,9 +182,4 @@
             </div>
         @endif
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+@endsection
