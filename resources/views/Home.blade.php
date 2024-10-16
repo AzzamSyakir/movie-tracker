@@ -79,7 +79,6 @@
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         transition: all 0.3s ease;
-        padding: 3px;
     }
 
     .fa-plus-circle, .fa-info {
