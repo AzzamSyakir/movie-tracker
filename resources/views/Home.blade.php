@@ -174,7 +174,7 @@
     carouselItems.forEach((item) => {
         const movies = Array.from(item.querySelectorAll('.movie-card'));
         let itemsPerSlide;
-        else if (screenWidth <= 425) {
+        if (screenWidth <= 425) {
             itemsPerSlide = 2;
         }
         else if (screenWidth <= 768) {

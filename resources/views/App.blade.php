@@ -540,7 +540,7 @@ button:focus {
                 <a href="/">Movie Addict</a>
             </nav>
 
-            <button class="menu-toggle" onclick="toggleMenu()">
+            <button class="menu-toggle" onclick="tooglemenu()">
                     &#9776; <span class="menu-text">Menu</span>
                 </button>
             </div>
@@ -584,7 +584,7 @@ button:focus {
         </div>
     </nav>
     <div class="navbar-menu" id="navbar-menu">
-        <button class="menu-close" onclick="toggleMenu()">&times;</button>
+        <button class="menu-close" onclick="tooglemenu()">&times;</button>
         <ul>
             <li><a href="#">Movies</a></li>
             <li><a href="#">TV Shows</a></li>
@@ -640,6 +640,10 @@ button:focus {
 
 @yield(section: 'custom-js')
 <script>
+     function tooglemenu() {
+            const navbarMenu = document.getElementById('navbar-menu');
+            navbarMenu.classList.toggle('active');
+            }
     document.addEventListener('DOMContentLoaded', function() {
         const searchButton = document.getElementById('searchButton');
         const searchInput = document.getElementById('movieQuery');
@@ -697,18 +701,22 @@ button:focus {
                         }
             });
 
+                document.addEventListener('click', function(event) {
+                    if (dropdownToggle && dropdownMenu) {
+                        dropdownToggle.addEventListener('click', function() {
+                            dropdownMenu.classList.toggle('show');
+                        });
 
-        if (dropdownToggle) {
-            dropdownToggle.addEventListener('click', function() {
-                dropdownMenu.classList.toggle('show');
-            });
+                        document.addEventListener('click', function(event) {
+                            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                                dropdownMenu.classList.remove('show');
+                            }
+                        });
+                    }
+                });
+                });
+    
 
-            document.addEventListener('click', function(event) {
-                if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-        }
 
         if (accountName && accountName.textContent.length > 13) {
             accountName.textContent = accountName.textContent.substring(0, 13);
