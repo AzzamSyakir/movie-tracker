@@ -25,8 +25,15 @@
         .movie-header.no-trailer {
             flex-direction: row;
         }
+        .trailer-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: inherit;
+        }
         .movie-poster {
-            width: 220px;
+            max-width: 220px;
+            width: 100%;
             height: 315px;
             border-radius: 5px;
             margin-right: 20px;
@@ -89,6 +96,24 @@
         .btn-back:hover {
             background-color: #0056b3;
         }
+        /* media queries */
+        @media (max-width: 768px) {
+        .movie.movie-poster{
+            flex: 0 0 30%;
+        } 
+        .trailer-container {
+            flex: 0 0 70%;
+            margin-right: 30px;  
+         }
+        .movie-header {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+}
+
     </style>
 @endsection
 @section('custom-js')
