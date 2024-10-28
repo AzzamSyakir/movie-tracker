@@ -29,8 +29,11 @@ class ApiController
         try {
             foreach (array_slice($randomPages, 0, 5) as $page) {
                 $response = $client->get($baseUrl, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                        'Accept' => 'application/json'
+                    ],
                     'query' => [
-                        'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
@@ -38,6 +41,7 @@ class ApiController
                         'sort_by' => 'popularity.desc',
                     ]
                 ]);
+                
     
             
                 if ($response->getStatusCode() === 200) {
@@ -71,8 +75,11 @@ class ApiController
         try {
             foreach (array_slice($randomPages, 0, 5) as $page) {
                 $response = $client->get($baseUrl, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                        'Accept' => 'application/json'
+                    ],
                     'query' => [
-                        'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
@@ -114,8 +121,11 @@ class ApiController
         try {
             foreach (array_slice($randomPages, 0, 5) as $page) {
                 $response = $client->get($baseUrl, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                        'Accept' => 'application/json'
+                    ],
                     'query' => [
-                        'api_key' => $this->apiKey,
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
@@ -165,97 +175,109 @@ class ApiController
         }
     
         return $movieFiltered;
-    }
-    public function GetMoviesByCountry($country)
+    }public function GetMoviesByCountry($country)
     {
         $baseUrl = 'https://api.themoviedb.org/3/discover/movie';
         $randomNumber1 = rand(1, 20);
         $randomNumber2 = rand(1, 20);
         try {
-            $responsePage1 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
+            $responsePage1 = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Accept' => 'application/json'
+            ])->get($baseUrl, [
                 'page' => $randomNumber1,
                 'with_origin_country' => $country,
                 'include_adult' => false
             ]);
-
-            $responsePage2 = Http::get($baseUrl, [
-                'api_key' => $this->apiKey,
+    
+            $responsePage2 = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Accept' => 'application/json'
+            ])->get($baseUrl, [
                 'page' => $randomNumber2,
                 'with_origin_country' => $country,
                 'include_adult' => false
             ]);
-
+    
             if ($responsePage1->successful() && $responsePage2->successful()) {
                 $dataPage1 = $responsePage1->json('results');
                 $dataPage2 = $responsePage2->json('results');
-
+    
                 $filteredMoviesPage1 = array_filter($dataPage1, function($movie) {
                     return !$movie['adult'];
                 });
-
+    
                 $filteredMoviesPage2 = array_filter($dataPage2, function($movie) {
                     return !$movie['adult'];
                 });
-
+    
                 $allMovies = array_merge($filteredMoviesPage1, $filteredMoviesPage2);
                 $selectedMovies = array_slice($allMovies, 0, 30);
                 return $selectedMovies;
             } else {
                 $errorMessagePage1 = $responsePage1->json('status_message') ?? 'No error message provided';
                 $errorMessagePage2 = $responsePage2->json('status_message') ?? 'No error message provided';
-
+    
                 throw new \Exception('API response error. Page 1: ' . $errorMessagePage1 . ' Page 2: ' . $errorMessagePage2);
             }
         } catch (\Exception $e) {
             throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
         }
     }
+    
     public function getMovieDetails($id)
     {
         try {
-            $response = Http::get("https://api.themoviedb.org/3/movie/" . $id, [
-                'api_key' => $this->apiKey,
-            ]);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Accept' => 'application/json'
+            ])->get("https://api.themoviedb.org/3/movie/" . $id);
+    
             if ($response->successful()) {
                 return $response->json();
             } else {
                 $responseData = json_decode($response->body(), true);
                 $errorMessage = isset($responseData['status_message']) ? $responseData['status_message'] : 'No error message provided';
-
+    
                 throw new \Exception('API response error with status code: ' . $response->status() . ' and message: ' . $errorMessage);
             }
         } catch (\Exception $e) {
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
+    
     public function getMovieVideos($id)
     {
         try {
-            $response = Http::get("https://api.themoviedb.org/3/movie/" . $id . "/videos", [
-                'api_key' => $this->apiKey,
-            ]);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Accept' => 'application/json'
+            ])->get("https://api.themoviedb.org/3/movie/" . $id . "/videos");
+    
             if ($response->successful()) {
                 return $response->json('results');
             } else {
                 $responseData = json_decode($response->body(), true);
                 $errorMessage = isset($responseData['status_message']) ? $responseData['status_message'] : 'No error message provided';
-
+    
                 throw new \Exception('API response error with status code: ' . $response->status() . ' and message: ' . $errorMessage);
             }
         } catch (\Exception $e) {
             throw new \Exception('Failed to fetch movie videos: ' . $e->getMessage());
         }
     }
+    
     public function SearchMovie($query)
     {
         try {
-            $response = Http::get("https://api.themoviedb.org/3/search/movie", [
-                'api_key' => $this->apiKey,
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Accept' => 'application/json'
+            ])->get("https://api.themoviedb.org/3/search/movie", [
                 'query' => $query,
                 'include_adult' => false
             ]);
-
+    
             if ($response->successful()) {
                 $movies = $response->json('results');
                 $filteredMovies = $this->FilterMovieByMpaa($movies);
@@ -263,13 +285,11 @@ class ApiController
             } else {
                 $responseData = json_decode($response->body(), true);
                 $errorMessage = isset($responseData['status_message']) ? $responseData['status_message'] : 'No error message provided';
-
+    
                 throw new \Exception('API response error with status code: ' . $response->status() . ' and message: ' . $errorMessage);
             }
         } catch (\Exception $e) {
             throw new \Exception('Failed to fetch movie details: ' . $e->getMessage());
         }
     }
-
-}
-
+}    

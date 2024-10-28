@@ -237,13 +237,15 @@
                                                     <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -285,13 +287,15 @@
                                                     <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -333,13 +337,15 @@
                                                     <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>

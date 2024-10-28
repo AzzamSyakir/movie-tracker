@@ -22,17 +22,30 @@ class ViewController
         $client = new Client(['base_uri' => 'http://nginx/']);
     
         try {
-            $responsePopularMovies = $client->get('popular-movies');
-            $popularMovies = json_decode($responsePopularMovies->getBody()->getContents(), true);
+            $popularMoviesResponse = $client->get('popular-movies');
+            if ($popularMoviesResponse->getStatusCode() === 200) {
+                $popularMovies = json_decode($popularMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
+        }
     
-            $responseNowPlayingMovies = $client->get('nowPlaying-movies');
-            $nowPlayingMovies = json_decode($responseNowPlayingMovies->getBody()->getContents(), true);
+        try {
+            $nowPlayingMoviesResponse = $client->get('nowPlaying-movies');
+            if ($nowPlayingMoviesResponse->getStatusCode() === 200) {
+                $nowPlayingMovies = json_decode($nowPlayingMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch now playing movies: ' . $e->getMessage());
+        }
     
-            $responseTopRatedMovies = $client->get('topRated-movies');
-            $topRatedMovies = json_decode($responseTopRatedMovies->getBody()->getContents(), true);
-    
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            throw new \Exception('Failed to fetch movies: ' . $e->getMessage());
+        try {
+            $topRatedMoviesResponse = $client->get('topRated-movies');
+            if ($topRatedMoviesResponse->getStatusCode() === 200) {
+                $topRatedMovies = json_decode($topRatedMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch top rated movies: ' . $e->getMessage());
         }
     
         if (Auth::check()) {
