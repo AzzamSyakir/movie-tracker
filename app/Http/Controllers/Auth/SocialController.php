@@ -17,7 +17,7 @@ class SocialController
 }
     public function GoogleCallback()
 {
-    $userFromGoogle = Socialite::driver('google')->user();
+    $userFromGoogle =Socialite::driver('google')->stateless()->user();     
 
     $userFromDatabase = User::where('social_id', $userFromGoogle->getId())->first();
 
