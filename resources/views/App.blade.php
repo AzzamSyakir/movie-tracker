@@ -49,14 +49,17 @@ footer {
     flex-wrap: nowrap;
 }
 
+.navbar-container .watchlist,
+.navbar-container .sign-in {
+    margin-left: 10px; 
+}
+
 .navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
 }
-
 .navbar-brand, .navbar-title a {
     color: #fff;
     text-decoration: none;
@@ -163,6 +166,11 @@ footer {
     display: flex;
     align-items: center;
 }
+.navbar-search {
+    position: relative;
+    width: 100%;
+    max-width: 1400px; 
+}
 
 .navbar-search input {
     width: 100%;
@@ -176,6 +184,8 @@ footer {
 .navbar-search button {
     position: absolute;
     right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     background-color: transparent;
     border: none;
     color: #808080;
@@ -187,6 +197,7 @@ footer {
 .navbar-search button:hover {
     color: #666;
 }
+
 
 /* Sign In */
 .sign-in button {
@@ -212,7 +223,6 @@ footer {
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-left: 10px;
     transition: background-color 0.3s;
 }
 .watchlist button {
@@ -533,18 +543,19 @@ button:focus {
 </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">
             <nav class="navbar-title">
                 <a href="/">Movie Addict</a>
             </nav>
 
             <button class="menu-toggle" onclick="toggleMenu()">
-                    &#9776; <span class="menu-text">Menu</span>
-                </button>
-            </div>
-            <div class="navbar-search">
+                &#9776; <span class="menu-text">Menu</span>
+            </button>
+        </div>
+        
+        <div class="navbar-search">
             <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
             <button type="button" id="searchIcon">
                 <i class="fas fa-search"></i>
@@ -552,37 +563,36 @@ button:focus {
             <button type="button" id="closeIcon">
                 <i class="fas fa-times"></i>
             </button>
-                <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
-            </div>
-            </div>
-           <div class="watchlist">
-                <i class="fas fa-bookmark"></i>
-                <button onclick="window.location.href = '{{ route('GetWatchlist') }}'" type="button">Watchlist</button>
-            </div>
-
-            @guest
-            <div class="sign-in">
-                <form action="{{ route('SignInView') }}" method="GET">
-                    <button type="submit">Sign in</button>
-                </form>
-            </div>
-            @endguest
-            @auth
-            <div class="account-dropdown">
-                <button class="account-dropdown-toggle">
-                    <i class="fas fa-user"></i> <span class="account-name">{{Auth::user()->name}}</span>
-                </button>
-                <div class="account-dropdown-menu">
-                    <a href="{{route('AccountSettingView')}}">Account Settings</a>
-                    <a href="{{route('GetWatchlist')}}">Watchlist</a>
-                    <a href={{route('SignOutController')}}>Sign Out</a>
-                </div>
-            </div>
-
-
-            @endauth
+            <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
         </div>
-    </nav>
+        
+        <div class="watchlist">
+            <i class="fas fa-bookmark"></i>
+            <button onclick="window.location.href = '{{ route('GetWatchlist') }}'" type="button">Watchlist</button>
+        </div>
+
+        @guest
+        <div class="sign-in">
+            <form action="{{ route('SignInView') }}" method="GET">
+                <button type="submit">Sign in</button>
+            </form>
+        </div>
+        @endguest
+
+        @auth
+        <div class="account-dropdown">
+            <button class="account-dropdown-toggle">
+                <i class="fas fa-user"></i> <span class="account-name">{{Auth::user()->name}}</span>
+            </button>
+            <div class="account-dropdown-menu">
+                <a href="{{route('AccountSettingView')}}">Account Settings</a>
+                <a href="{{route('GetWatchlist')}}">Watchlist</a>
+                <a href={{route('SignOutController')}}>Sign Out</a>
+            </div>
+        </div>
+        @endauth
+    </div>
+</nav>
     <div class="navbar-menu" id="navbar-menu">
         <button class="menu-close" onclick="toggleMenu()">&times;</button>
         <ul>

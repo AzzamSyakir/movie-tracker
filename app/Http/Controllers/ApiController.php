@@ -34,9 +34,12 @@ class ApiController
                         'Accept' => 'application/json'
                     ],
                     'query' => [
+                        'language' => 'en-US',
+                        'region' => 'US', 
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
+                        'certification.gte' => 'PG',
                         'certification.lte' => 'PG-13',
                         'sort_by' => 'popularity.desc',
                     ]
@@ -80,9 +83,12 @@ class ApiController
                         'Accept' => 'application/json'
                     ],
                     'query' => [
+                        'language' => 'en-US',
+                        'region' => 'US', 
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
+                        'certification.gte' => 'PG',
                         'certification.lte' => 'PG-13',
                         'sort_by' => 'vote_average.desc',
                     ]
@@ -126,9 +132,12 @@ class ApiController
                         'Accept' => 'application/json'
                     ],
                     'query' => [
+                        'language' => 'en-US',
+                        'region' => 'US', 
                         'page' => $page,
                         'include_adult' => false,
                         'certification_country' => 'US',
+                        'certification.gte' => 'PG',
                         'certification.lte' => 'PG-13',
                         'sort_by' => 'primary_release_date.desc',
                     ]
