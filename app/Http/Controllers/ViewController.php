@@ -21,31 +21,31 @@ class ViewController
     public function homepage() {
         $client = new Client(['base_uri' => 'http://nginx/']);
     
-        $promises = [
-            'popularMovies' => $client->getAsync('popular-movies'),
-            'nowPlayingMovies' => $client->getAsync('nowPlaying-movies'),
-            'topRatedMovies' => $client->getAsync('topRated-movies'),
-        ];
-    
-        $results = Promise\Utils::settle($promises)->wait();
-    
-        // Pastikan untuk memeriksa status fulfilled
-        if ($results['popularMovies']['state'] === 'fulfilled') {
-            $popularMovies = json_decode($results['popularMovies']['value']->getBody()->getContents(), true);
-        } else {
-            throw new \Exception('Failed to fetch popular movies');
+        try {
+            $popularMoviesResponse = $client->get('popular-movies');
+            if ($popularMoviesResponse->getStatusCode() === 200) {
+                $popularMovies = json_decode($popularMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch popular movies: ' . $e->getMessage());
         }
     
-        if ($results['nowPlayingMovies']['state'] === 'fulfilled') {
-            $nowPlayingMovies = json_decode($results['nowPlayingMovies']['value']->getBody()->getContents(), true);
-        } else {
-            throw new \Exception('Failed to fetch now playing movies');
+        try {
+            $nowPlayingMoviesResponse = $client->get('nowPlaying-movies');
+            if ($nowPlayingMoviesResponse->getStatusCode() === 200) {
+                $nowPlayingMovies = json_decode($nowPlayingMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch now playing movies: ' . $e->getMessage());
         }
     
-        if ($results['topRatedMovies']['state'] === 'fulfilled') {
-            $topRatedMovies = json_decode($results['topRatedMovies']['value']->getBody()->getContents(), true);
-        } else {
-            throw new \Exception('Failed to fetch top rated movies');
+        try {
+            $topRatedMoviesResponse = $client->get('topRated-movies');
+            if ($topRatedMoviesResponse->getStatusCode() === 200) {
+                $topRatedMovies = json_decode($topRatedMoviesResponse->getBody()->getContents(), true);
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to fetch top rated movies: ' . $e->getMessage());
         }
     
         if (Auth::check()) {

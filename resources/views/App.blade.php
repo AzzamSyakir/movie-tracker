@@ -546,10 +546,10 @@ button:focus {
             </div>
             <div class="navbar-search">
             <input type="text" id="movieQuery" class="form-control" placeholder="Search Movies">
-            <button type="SearchIcon" id="searchIcon">
+            <button type="button" id="searchIcon">
                 <i class="fas fa-search"></i>
             </button>
-            <button type="CloseIcon" id="closeIcon">
+            <button type="button" id="closeIcon">
                 <i class="fas fa-times"></i>
             </button>
                 <div id="dropdownResults" class="search-dropdown-menu" style="display: none;"></div>
