@@ -16,7 +16,7 @@
 
     .movie-poster {
         width: 100%;
-        height: auto;
+        height: 250px;
         object-fit: cover;
     }
 
@@ -79,7 +79,6 @@
         background-color: rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         transition: all 0.3s ease;
-        padding: 3px;
     }
 
     .fa-plus-circle, .fa-info {
@@ -167,39 +166,30 @@
                 adjustCarouselItems();
                 window.addEventListener('resize', adjustCarouselItems);
             });
-            function adjustCarouselItems() {
-                const screenWidth = window.innerWidth;
-                let itemsPerSlide;
+            
+    function adjustCarouselItems() {
+    const screenWidth = window.innerWidth;
+    const carouselItems = document.querySelectorAll('.carousel .carousel-item');
 
-                const carouselItems = document.querySelectorAll('.carousel .carousel-item');
+    carouselItems.forEach((item) => {
+        const movies = Array.from(item.querySelectorAll('.movie-card'));
+        let itemsPerSlide;
+        if (screenWidth <= 425) {
+            itemsPerSlide = 2;
+        }
+        else if (screenWidth <= 768) {
+            itemsPerSlide = 4;
+        }
+        else {
+            movies.forEach(movie => movie.style.width = '');
+            itemsPerSlide = 6;
+        }
 
-                carouselItems.forEach((item) => {
-                    const movies = Array.from(item.querySelectorAll('.movie-card'));
-                    movies.forEach((movie, index) => {
-                        movies.forEach((movie, index) => {
-                            if (screenWidth <= 320) {
-                                movie.style.width = '110px';
-                                itemsPerSlide = 2;
-                            } 
-                            else if (screenWidth <= 375) {
-                                movie.style.width = '80px';
-                                itemsPerSlide = 3;
-                            }
-                            else if (screenWidth <= 425) {
-                                movie.style.width = '100px';
-                                itemsPerSlide = 3;
-                            }
-                            else {
-                                movie.style.width = '';
-                                itemsPerSlide = 6;
-                            }
-                        });
-
-                        movie.style.display = index < itemsPerSlide ? 'block' : 'none';
-                    });
-                });
-            }
-
+        movies.forEach((movie, index) => {
+            movie.style.display = index < itemsPerSlide ? 'block' : 'none';
+        });
+    });
+}
             $(document).ready(function () {
                 function updateCarouselControls(carouselId) {
                     var carousel = $(carouselId);
@@ -221,40 +211,41 @@
         </script>
 @endsection
 @section('content')
-    <div class="container mt-4">
-        <!-- Popular Movies Carousel -->
-        <div id="popularMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
-            <h5>Popular Movies</h5>
-            <div class="d-flex justify-content-between align-items-center position-relative">
-                <a class="carousel-control-prev" href="#popularMoviesCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <div class="carousel-inner w-100">
+<div class="container mt-4">
+    <div id="popularMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
+        <h5>Popular Movies</h5>
+        <div class="d-flex justify-content-between align-items-center position-relative">
+            <a class="carousel-control-prev" href="#popularMoviesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <div class="carousel-inner w-100">
                 @foreach (array_chunk($popularMovies, 6) as $index => $chunk)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         <div class="row">
                             @foreach ($chunk as $movie)
-                                <div class="col-md-2 mb-3">
-                                    <div class="movie-card">
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-6 mb-3">
+                            <div class="movie-card">
                                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="movie-poster">
                                         <div class="movie-info">
                                             <div class="movie-details">
                                                 <div class="movie-rating-title">
-                                                <div class="movie-rating">
+                                                    <div class="movie-rating">
                                                         <i class="fa fa-star"></i>
                                                         <span class="rating">{{ number_format($movie['vote_average'], 1) }}</span>
                                                     </div>
                                                     <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -263,47 +254,48 @@
                         </div>
                     </div>
                 @endforeach
-
-                </div>
-                <a class="carousel-control-next" href="#popularMoviesCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            <a class="carousel-control-next" href="#popularMoviesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-        <!-- Now Playing Movies Carousel -->
-        <div id="nowPlayingMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
-            <h5>Now Playing Movies</h5>
-            <div class="d-flex justify-content-between align-items-center position-relative">
-                <a class="carousel-control-prev" href="#nowPlayingMoviesCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <div class="carousel-inner w-100">
+    </div>
+    
+    <div id="nowPlayingMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
+        <h5>Now Playing Movies</h5>
+        <div class="d-flex justify-content-between align-items-center position-relative">
+            <a class="carousel-control-prev" href="#nowPlayingMoviesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <div class="carousel-inner w-100">
                 @foreach (array_chunk($nowPlayingMovies, 6) as $index => $chunk)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         <div class="row">
                             @foreach ($chunk as $movie)
-                                <div class="col-md-2 mb-3">
+                                <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-6 mb-3">
                                     <div class="movie-card">
                                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="movie-poster">
                                         <div class="movie-info">
                                             <div class="movie-details">
                                                 <div class="movie-rating-title">
-                                                    <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                     <div class="movie-rating">
                                                         <i class="fa fa-star"></i>
                                                         <span class="rating">{{ number_format($movie['vote_average'], 1) }}</span>
                                                     </div>
+                                                    <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -312,46 +304,48 @@
                         </div>
                     </div>
                 @endforeach
-                </div>
-                <a class="carousel-control-next" href="#nowPlayingMoviesCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            <a class="carousel-control-next" href="#nowPlayingMoviesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-        <!-- Top Rated Movies Carousel -->
-        <div id="topRatedMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
-            <h5>Top Rated Movies</h5>
-            <div class="d-flex justify-content-between align-items-center position-relative">
-                <a class="carousel-control-prev" href="#topRatedMoviesCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <div class="carousel-inner w-100">
+    </div>
+
+    <div id="topRatedMoviesCarousel" class="carousel slide mb-4" data-ride="carousel" data-interval="false">
+        <h5>Top Rated Movies</h5>
+        <div class="d-flex justify-content-between align-items-center position-relative">
+            <a class="carousel-control-prev" href="#topRatedMoviesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <div class="carousel-inner w-100">
                 @foreach (array_chunk($topRatedMovies, 6) as $index => $chunk)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         <div class="row">
                             @foreach ($chunk as $movie)
-                                <div class="col-md-2 mb-3">
+                                <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-6 mb-3">
                                     <div class="movie-card">
                                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="movie-poster">
                                         <div class="movie-info">
                                             <div class="movie-details">
                                                 <div class="movie-rating-title">
-                                                    <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                     <div class="movie-rating">
                                                         <i class="fa fa-star"></i>
                                                         <span class="rating">{{ number_format($movie['vote_average'], 1) }}</span>
                                                     </div>
+                                                    <h2 class="movie-title">{{ $movie['title'] }}</h2>
                                                 </div>
                                                 <div class="button-group">
-                                                    <button class="watchlist-btn">
+                                                    <button class="watchlist-btn" onclick="window.location.href='{{ route('GetWatchlist') }}'">
                                                         <i class="fa fa-plus-circle"></i> Watchlist
                                                     </button>
-                                                    <button class="trailer-btn">
+
+                                                    <button class="trailer-btn" onclick="window.location.href='{{ route('MovieDetail', ['movieId' => $movie['id']]) }}'">
                                                         <i class="fa fa-info"></i> Info
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -360,13 +354,13 @@
                         </div>
                     </div>
                 @endforeach
-
-                </div>
-                <a class="carousel-control-next" href="#topRatedMoviesCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            <a class="carousel-control-next" href="#topRatedMoviesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     </div>
+</div>
+
 @endsection
