@@ -7,7 +7,7 @@ ENV user=$user
 ENV uid=$uid
 
 # Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         curl \
         libpq-dev \
@@ -17,22 +17,28 @@ RUN apt-get update && apt-get install -y \
         libxml2-dev \
         zip \
         unzip \
-        nano && \
-    docker-php-ext-install pdo pdo_pgsql && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+        nano \
+    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer globally
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
 
 # Create a non-root user
 RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
     mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-# Set working directory and switch to non-root user
+# Set working directory
 WORKDIR /var/www
-USER $user
 
-# Copy source code to container
-COPY . .
+# Copy all source code
+COPY --chown=$user:$user . .
+
+# Install Composer dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Switch to non-root user
+USER $user
