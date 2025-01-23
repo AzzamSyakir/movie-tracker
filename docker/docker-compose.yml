@@ -47,8 +47,7 @@ services:
       - "443:${WEB_PORT_SSL}"
     volumes:
       - ./conf/nginx/conf.d:/etc/nginx/conf.d
-      - ../.:/var/www/
-        
+      - ../.:/var/www/ 
   portainer_agent:
       image: portainer/agent:latest
       container_name: portainer_agent
@@ -67,4 +66,3 @@ networks:
 volumes:
   app-db:
     driver: local
-  portainer-data:
