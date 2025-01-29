@@ -1,5 +1,8 @@
 FROM php:8.2-fpm
 
+# Set working directory
+WORKDIR /var/www
+
 # Arguments and environment variables
 ARG user=user
 ARG uid=1000
@@ -21,24 +24,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install pdo pdo_pgsql mbstring bcmath \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && \
-    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
-    rm composer-setup.php
-
-# Create a non-root user
-RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
-    mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-
-# Set working directory
-WORKDIR /var/www
-
 # Copy all source code
-COPY --chown=$user:$user . .
-
+COPY . .
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
 
-# Switch to non-root user
-USER $user
