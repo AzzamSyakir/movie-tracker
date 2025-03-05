@@ -50,5 +50,5 @@ jobs:
       - name: Run Docker
         run: |
           mv .env ~/program/movie-tracker
-          cd ~/program/bukanasa/movie-tracker
+          cd ~/program/movie-tracker
           docker compose --env-file .env -f docker/docker-compose.yml up -d
