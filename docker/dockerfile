@@ -1,6 +1,10 @@
 # Stage 1: Builder
 FROM php:8.2-fpm AS builder
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
 # Install dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
@@ -17,6 +21,33 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add Composer
+<<<<<<< HEAD
+=======
+=======
+# Arguments and environment variables
+ARG user=user
+ARG uid=1000
+ENV user=$user
+ENV uid=$uid
+
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+        curl \
+        libpq-dev \
+        postgresql-client \
+        libpng-dev \
+        libonig-dev \
+        libxml2-dev \
+        zip \
+        unzip \
+        nano \
+    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install Composer
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create non-root user
@@ -25,6 +56,10 @@ ARG uid=1000
 RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
     mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
 
 WORKDIR /var/www
 
@@ -66,4 +101,16 @@ COPY --from=builder --chown=$user:$user /var/www .
 
 EXPOSE 9000
 
+<<<<<<< HEAD
+=======
+=======
+# Set working directory
+WORKDIR /var/www
+# Copy all source code
+COPY --chown=$user:$user . .
+# Install Composer dependencies
+RUN composer install --no-dev --optimize-autoloader
+# Switch to non-root user
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
 USER $user

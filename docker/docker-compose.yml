@@ -1,4 +1,8 @@
 services:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
     app-db:
         image: postgres:latest
         container_name: app-db
@@ -48,11 +52,74 @@ services:
         volumes:
             - ./conf/nginx/conf.d:/etc/nginx/conf.d
             - ../.:/var/www/
+<<<<<<< HEAD
+=======
+=======
+  app-db:
+    image: postgres:latest
+    container_name: app-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    expose:
+      - 5432
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - app-db:/var/lib/postgresql/data
+    networks:
+      - app-network
+  app:
+    build:
+      context: ../
+      dockerfile: docker/dockerfile
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    networks:
+      - app-network
+    depends_on:
+      - app-db
+    environment:
+      DB_HOST: app-db
+    volumes:
+      - ./conf/php/conf.d:/etc/php/conf.d
+    command: /bin/sh -c "php artisan config:cache && php artisan migrate --force && php-fpm"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - app
+    networks:
+      - app-network
+    ports:
+      - "80:${WEB_PORT_HTTP}"
+      - "443:${WEB_PORT_SSL}"
+    volumes:
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d
+      - ../.:/var/www/ 
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
 
 networks:
     app-network:
         driver: bridge
 
 volumes:
+<<<<<<< HEAD
     app-db:
         driver: local
+=======
+<<<<<<< HEAD
+    app-db:
+        driver: local
+=======
+  app-db:
+    driver: local
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
+>>>>>>> 013b45279eeffdced47b71cdb7ff306bd3c65117
