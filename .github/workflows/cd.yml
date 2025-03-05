@@ -45,7 +45,7 @@ jobs:
       - name: Stop and Remove Old Containers
         run: |
           cd ~/program/movie-tracker
-          docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
+          docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans
 
       - name: Remove Old Docker Image
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
