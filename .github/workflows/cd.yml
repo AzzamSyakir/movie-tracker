@@ -48,4 +48,4 @@ jobs:
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
 
       - name: Run Docker
-        run: docker compose --env-file ./.env -f program/movie-tracker/docker/docker-compose.yml up -d
+        run: docker compose --env-file ./.env -f ~/program/movie-tracker/docker/docker-compose.yml up -d
