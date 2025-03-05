@@ -13,15 +13,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          path: movie-tracker
 
       - name: Copy .env.example to .env
-        run: |
-          cd movie-tracker
-          cp .env.example .env
+        run: cp .env.example .env
       
       - name: Override secret values in .env
         run: |
-          cd movie-tracker
           sed -i "s|^APP_KEY=.*|APP_KEY=${{ secrets.APP_KEY }}|" .env
           sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${{ secrets.DB_DATABASE }}|" .env
           sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${{ secrets.DB_USERNAME }}|" .env
@@ -34,7 +33,12 @@ jobs:
           sed -i "s|^GOOGLE_CLIENT_SECRET=.*|GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_ID=.*|FACEBOOK_CLIENT_ID=${{ secrets.FACEBOOK_CLIENT_ID }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
-      
+          
+      - name: Move .env file to project directory and cd to the directory
+        run: |
+          mv -f .env ~/program/movie-tracker/.env
+          cd ~/program/movie-tracker
+        
       - name: Login to DockerHub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -42,14 +46,10 @@ jobs:
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Stop and Remove Old Containers
-        run: |
-          cd ~/program/movie-tracker
-          docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
+        run: docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
 
       - name: Remove Old Docker Image
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
 
       - name: Run Docker
-        run: |
-          cd ~/program/movie-tracker
-          docker compose --env-file ./.env -f docker/docker-compose.yml up -d
+\        run: docker compose --env-file ./.env -f docker/docker-compose.yml up -d
