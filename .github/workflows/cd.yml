@@ -38,9 +38,6 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
-      - name: Pull Docker Image
-        run: docker pull bukanasa/movie-tracker:latest
-
       - name: Stop and Remove Old Containers
         run: docker compose --env-file ./.env -f ~/program/movie-tracker/docker/docker-compose.yml down --remove-orphans || true
 
