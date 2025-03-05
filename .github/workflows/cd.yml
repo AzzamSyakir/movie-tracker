@@ -43,7 +43,7 @@ jobs:
 
       - name: Stop and Remove Old Containers
         run: |
-          cd movie-tracker
+          cd ~/program/movie-tracker
           docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
 
       - name: Remove Old Docker Image
@@ -51,5 +51,5 @@ jobs:
 
       - name: Run Docker
         run: |
-          cd movie-tracker
+          cd ~/program/movie-tracker
           docker compose --env-file ./.env -f docker/docker-compose.yml up -d
