@@ -30,7 +30,6 @@ services:
             DB_HOST: app-db
         volumes:
             - ../.:/var/www/
-            - ./conf/php/conf.d:/etc/php/conf.d
         command: /bin/sh -c "php artisan config:cache && php artisan migrate --force && php-fpm"
 
     nginx:
