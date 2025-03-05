@@ -32,10 +32,10 @@ jobs:
           sed -i "s|^FACEBOOK_CLIENT_ID=.*|FACEBOOK_CLIENT_ID=${{ secrets.FACEBOOK_CLIENT_ID }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
           
-      - name: move env and cd to project dir 
+      - name: Move .env and cd to project dir
         run: |
           cd ~/program/movie-tracker
-          mv .env ~/program/movie-tracker
+          mv -f .env ~/program/movie-tracker/.env
         
       - name: Login to DockerHub
         env:
