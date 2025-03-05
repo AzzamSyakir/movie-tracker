@@ -1,5 +1,24 @@
-FROM php:8.2-fpm
+# Stage 1: Builder
+FROM php:8.2-fpm AS builder
 
+<<<<<<< HEAD
+# Install dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpq-dev \
+    postgresql-client \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    nano && \
+    docker-php-ext-install pdo pdo_pgsql && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Add Composer
+=======
 # Arguments and environment variables
 ARG user=user
 ARG uid=1000
@@ -22,12 +41,58 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create a non-root user
+# Create non-root user
+ARG user=user
+ARG uid=1000
 RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
     mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
+<<<<<<< HEAD
+
+WORKDIR /var/www
+
+# Copy composer files and install packages
+COPY --chown=$user:$user composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --optimize-autoloader
+
+# Copy all source code
+COPY --chown=$user:$user . .
+
+# Stage 2: Final Image
+FROM php:8.2-fpm
+
+# Install required extensions
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip && \
+    docker-php-ext-install pdo pdo_pgsql && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Add Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Create non-root user
+ARG user=user
+ARG uid=1000
+RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
+    mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+WORKDIR /var/www
+
+# Copy built files from builder
+COPY --from=builder --chown=$user:$user /var/www .
+
+EXPOSE 9000
+
+=======
 # Set working directory
 WORKDIR /var/www
 # Copy all source code
@@ -35,4 +100,5 @@ COPY --chown=$user:$user . .
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader
 # Switch to non-root user
+>>>>>>> 179f782564740605a39e8ebf63ec05f16f36574b
 USER $user
