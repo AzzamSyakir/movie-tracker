@@ -35,4 +35,4 @@ WORKDIR /var/www
 USER $user
 
 # Copy source code to container
-COPY ../ .
+COPY ../. .
