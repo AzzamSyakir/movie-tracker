@@ -35,10 +35,7 @@ jobs:
           sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
           
       - name: Move .env file to project directory and cd to the directory
-        run: |
-          mv -f .env ~/program/movie-tracker/.env
-          cd ~/program/movie-tracker
-        
+        run: mv -f .env ~/program/movie-tracker/.env      
       - name: Login to DockerHub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -46,10 +43,14 @@ jobs:
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Stop and Remove Old Containers
-        run: docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
+        run: |
+          cd ~/program/movie-tracker
+          docker compose --env-file ./.env -f docker/docker-compose.yml down --remove-orphans || true
 
       - name: Remove Old Docker Image
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
 
       - name: Run Docker
-        run: docker compose --env-file ./.env -f docker/docker-compose.yml up -d
+        run: |
+          cd ~/program/movie-tracker
+          docker compose --env-file ./.env -f docker/docker-compose.yml up -d
