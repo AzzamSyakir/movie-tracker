@@ -10,14 +10,36 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+      
+      - name: Override secret values in .env
+        run: |
+          sed -i "s|^APP_KEY=.*|APP_KEY=${{ secrets.APP_KEY }}|" .env
+          sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${{ secrets.DB_DATABASE }}|" .env
+          sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${{ secrets.DB_USERNAME }}|" .env
+          sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${{ secrets.DB_PASSWORD }}|" .env
+          sed -i "s|^MAIL_USERNAME=.*|MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}|" .env
+          sed -i "s|^MAIL_PASSWORD=.*|MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}|" .env
+          sed -i "s|^MAIL_ENCRYPTION=.*|MAIL_ENCRYPTION=${{ secrets.MAIL_ENCRYPTION }}|" .env
+          sed -i "s|^TMDB_API_KEY=.*|TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}|" .env
+          sed -i "s|^GOOGLE_CLIENT_ID=.*|GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}|" .env
+          sed -i "s|^GOOGLE_CLIENT_SECRET=.*|GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}|" .env
+          sed -i "s|^FACEBOOK_CLIENT_ID=.*|FACEBOOK_CLIENT_ID=${{ secrets.FACEBOOK_CLIENT_ID }}|" .env
+          sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
+    
       - name: Login to DockerHub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+        
       - name: Build Docker images
-        run: docker build -f docker/dockerfile -t bukanasa/movie-tracker:latest .          
+        run: docker build -f docker/dockerfile -t bukanasa/movie-tracker:latest .
+        
+      - name: Push Docker images
+        run: docker push bukanasa/movie-tracker:latest 
 
       - name: Push Docker image to DockerHub
         run: docker push bukanasa/movie-tracker:latest
