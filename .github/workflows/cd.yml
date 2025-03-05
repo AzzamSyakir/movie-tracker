@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,4 +52,4 @@ jobs:
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
 
       - name: Run Docker
-         run: docker compose --env-file ./.env -f docker/docker-compose.yml up -d
+        run: docker compose --env-file ./.env -f docker/docker-compose.yml up -d
