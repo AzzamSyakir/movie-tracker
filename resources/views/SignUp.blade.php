@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet" />
     <style>
+        /* (CSS styling yang sudah Anda buat) */
         .checkbox-label {
             color: #000000;
         }
+
         .signUp-button {
             background-color: #000000;
             color: #ffffff;
         }
+
         .SignUp-container {
             background-color: #ffffff;
             border-radius: 8px;
@@ -23,6 +27,7 @@
             padding: 24px;
             position: relative;
         }
+
         .loading-overlay {
             display: none;
             position: fixed;
@@ -35,6 +40,7 @@
             align-items: center;
             z-index: 1000;
         }
+
         .notification {
             display: none;
             background-color: #ff6f00;
@@ -45,11 +51,13 @@
             position: relative;
             animation: fadeIn 0.5s;
         }
+
         .notification.show {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .notification button {
             background: none;
             border: none;
@@ -57,96 +65,115 @@
             cursor: pointer;
             color: white;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body class="flex items-center justify-center min-h-screen p-4">
-<div id="loading" class="loading-overlay">
-    <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
-</div>
-<div class="SignUp-container">
-    <h1 class="text-2xl font-bold mb-6 text-center">Sign up</h1>
+    <div class="SignUp-container">
+        <h1 class="text-2xl font-bold mb-6 text-center">Sign up</h1>
 
-    <div id="notifications" class="mb-4"></div>
+        {{-- Tampilkan pesan error jika ada --}}
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
 
-    <form method="POST" action="{{ route('SignUpController') }}" onsubmit="return validateForm()">
-        @csrf
-        <div class="relative mb-4">
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="name" id="name" name="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-        </div>
-        <div class="relative mb-4">
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-        </div>
-        <div class="relative mb-4">
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-        </div>
-        <div class="flex items-center mb-6">
-            <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-black focus:ring-black border-gray-300 rounded">
-            <label for="remember" class="ml-2 text-sm text-black checkbox-label">I'm at least 17 years old and accept the Terms Of Use</label>
-        </div>
-        <div class="mb-6">
-            <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 signUp-button">Sign up</button>
-        </div>
-    </form>
-</div>
+        <div id="notifications" class="mb-4"></div>
 
-<script>
-    function showLoading() {
-        document.getElementById('loading').style.display = 'flex';
-    }
+        <form method="POST" action="{{ route('SignUpController') }}" onsubmit="return validateForm()">
+            @csrf
+            <div class="relative mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" id="name" name="name" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div class="relative mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div class="relative mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div class="flex items-center mb-6">
+                <input type="checkbox" id="checkbox" name="checkbox" required
+                    class="h-4 w-4 text-black focus:ring-black border-gray-300 rounded">
+                <label for="checkbox" class="ml-2 text-sm text-black checkbox-label">I'm at least 17 years old and
+                    accept the Terms Of Use</label>
+            </div>
+            <div class="mb-6">
+                <button type="submit" class="w-full px-4 py-2 rounded-md hover:bg-gray-700 signUp-button">Sign
+                    up</button>
+            </div>
+        </form>
+    </div>
 
-    function validateForm() {
-        const email = document.getElementById('email').value;
-        const name = document.getElementById('name').value;
-        const password = document.getElementById('password').value;
-        const remember = document.getElementById('remember').checked;
-        const notifications = document.getElementById('notifications');
-        notifications.innerHTML = '';
-
-        let isValid = true;
-
-        if (!email) {
-            showNotification('Please complete your email.');
-            isValid = false;
-        } 
-        if (!name) {
-            showNotification('Please complete your name.');
-            isValid = false;
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
         }
+        function validateForm() {
+            const email = document.getElementById('email').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const password = document.getElementById('password').value;
+            const checkbox = document.getElementById('checkbox').checked;
+            const notifications = document.getElementById('notifications');
+            notifications.innerHTML = '';
 
-        if (!password) {
-            showNotification('Please complete your password.');
-            isValid = false;
+            let isValid = true;
+            if (!email) {
+                showNotification('Please complete your email.');
+                isValid = false;
+            } else {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showNotification('Please enter a valid email address.');
+                    isValid = false;
+                }
+            }
+            if (!name) {
+                showNotification('Please complete your name.');
+                isValid = false;
+            }
+            if (!password) {
+                showNotification('Please complete your password.');
+                isValid = false;
+            }
+            if (!checkbox) {
+                showNotification('Please accept the Terms of Use.');
+                isValid = false;
+            }
+            if (isValid) {
+                showLoading();
+            }
+            return isValid;
         }
-
-        if (!remember) {
-            showNotification('Please accept the Terms of Use.');
-            isValid = false;
+        function showNotification(message) {
+            const notifications = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            notification.className = 'notification show';
+            notification.innerHTML = `${message} <button onclick="this.parentElement.style.display='none';">&times;</button>`;
+            notifications.appendChild(notification);
         }
-
-        if (isValid) {
-            showLoading();
-        }
-
-        return isValid;
-    }
-
-    function showNotification(message) {
-        const notifications = document.getElementById('notifications');
-        const notification = document.createElement('div');
-        notification.className = 'notification show';
-        notification.innerHTML = `${message} <button onclick="this.parentElement.style.display='none';">&times;</button>`;
-        notifications.AppendChild(notification);
-    }
-</script>
-
+    </script>
 </body>
+
 </html>
