@@ -58,7 +58,7 @@
 
         .navbar-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             width: 100%;
         }
@@ -158,13 +158,13 @@
             position: absolute;
             top: 100%;
             left: 0;
-            margin-left: -10px;
+            margin-left: -50px;
             right: auto;
             background-color: #1f1f1f;
             min-width: 160px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 1;
-            border-radius: 4px;
+            border-radius: 10px;
         }
 
         /* Search */
