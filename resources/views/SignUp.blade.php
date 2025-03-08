@@ -8,6 +8,7 @@
     <title>Sign Up</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.4/dist/tailwind.min.css" rel="stylesheet" />
     <style>
+        /* (CSS styling yang sudah Anda buat) */
         .checkbox-label {
             color: #000000;
         }
@@ -86,13 +87,20 @@
     <div class="SignUp-container">
         <h1 class="text-2xl font-bold mb-6 text-center">Sign up</h1>
 
+        {{-- Tampilkan pesan error jika ada --}}
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div id="notifications" class="mb-4"></div>
 
         <form method="POST" action="{{ route('SignUpController') }}" onsubmit="return validateForm()">
             @csrf
             <div class="relative mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="name" id="name" name="name" required
+                <input type="text" id="name" name="name" required
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
             <div class="relative mb-4">
@@ -122,7 +130,6 @@
         function showLoading() {
             document.getElementById('loading').style.display = 'flex';
         }
-
         function validateForm() {
             const email = document.getElementById('email').value.trim();
             const name = document.getElementById('name').value.trim();
@@ -132,8 +139,6 @@
             notifications.innerHTML = '';
 
             let isValid = true;
-
-            // Validasi email tidak kosong dan format yang valid
             if (!email) {
                 showNotification('Please complete your email.');
                 isValid = false;
@@ -144,29 +149,23 @@
                     isValid = false;
                 }
             }
-
             if (!name) {
                 showNotification('Please complete your name.');
                 isValid = false;
             }
-
             if (!password) {
                 showNotification('Please complete your password.');
                 isValid = false;
             }
-
             if (!checkbox) {
                 showNotification('Please accept the Terms of Use.');
                 isValid = false;
             }
-
             if (isValid) {
                 showLoading();
             }
-
             return isValid;
         }
-
         function showNotification(message) {
             const notifications = document.getElementById('notifications');
             const notification = document.createElement('div');
