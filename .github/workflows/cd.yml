@@ -9,10 +9,12 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          path: movie-tracker
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
@@ -31,6 +33,7 @@ jobs:
           sed -i "s|^GOOGLE_CLIENT_SECRET=.*|GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_ID=.*|FACEBOOK_CLIENT_ID=${{ secrets.FACEBOOK_CLIENT_ID }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
+          
 
       - name: Login to DockerHub
         env:
@@ -38,17 +41,11 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
-      - name: Pull Docker Image
-        run: docker pull bukanasa/movie-tracker:latest
-
       - name: Stop and Remove Old Containers
-        run: docker compose --env-file ./.env -f ~/program/movie-tracker/docker/docker-compose.yml down --remove-orphans || true
+        run: docker compose --env-file ./.env -f ~/program/movie-tracker/docker/docker-compose.yml down --remove-orphans
 
       - name: Remove Old Docker Image
         run: docker images --filter "reference=bukanasa/movie-tracker" --format "{{.ID}}" | xargs -r docker rmi -f || true
 
       - name: Run Docker
-        run: |
-          mv .env ~/program/movie-tracker
-          cd ~/program/movie-tracker
-          docker compose --env-file .env -f docker/docker-compose.yml up -d
+        run: docker compose --env-file ./.env -f ~/program/movie-tracker/docker/docker-compose.yml up -d
