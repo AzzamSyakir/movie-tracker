@@ -134,8 +134,8 @@
 
                 <div class="form-group">
                     <label for="name">Username</label>
-                    <input type="text" id="name" name="name" value="{{$user['name']}}" data-original-value="{{$user['name']}}"
-                        oninput="checkIfPasswordShouldBeEnabled()">
+                    <input type="text" id="name" name="name" value="{{ $user['name'] }}"
+                        data-original-value="{{ $user['name'] }}" oninput="checkIfPasswordShouldBeEnabled()">
                     @error('name')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -143,8 +143,8 @@
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{$user['email']}}"
-                        data-original-value="{{$user['email']}}" oninput="checkIfPasswordShouldBeEnabled()">
+                    <input type="email" id="email" name="email" value="{{ $user['email'] }}"
+                        data-original-value="{{ $user['email'] }}" oninput="checkIfPasswordShouldBeEnabled()">
                     @error('email')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -187,7 +187,8 @@
 
                 <div class="form-group">
                     <label for="name">Username</label>
-                    <input type="text" id="name" name="name" value="{{$user['name']}}" data-original-value="{{$user['name']}}">
+                    <input type="text" id="name" name="name" value="{{ $user['name'] }}"
+                        data-original-value="{{ $user['name'] }}">
                     @error('name')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -207,6 +208,7 @@
     @endif
     <script>
         const oauth_provider = "{{ $oauthProvider }}";
+
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.querySelector('.toggle-password i');
@@ -274,7 +276,6 @@
                         successMessage.style.display = 'block';
                         setTimeout(() => {
                             successMessage.style.display = 'none';
-                            location.reload();
                         }, time);
                     } else if (data.error) {
                         const errorTextElement = document.getElementById('error-text');
@@ -287,7 +288,6 @@
                         errorMessage.style.display = 'block';
                         setTimeout(() => {
                             errorMessage.style.display = 'none';
-                            location.reload();
                         }, time);
                     }
                 })
