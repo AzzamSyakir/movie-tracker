@@ -670,6 +670,11 @@
 
     @yield(section: 'custom-js')
     <script>
+        const navbarMenu = document.getElementById('navbar-menu');
+
+        function toggleMenu() {
+            navbarMenu.classList.toggle('active');
+        }
         document.addEventListener('DOMContentLoaded', function () {
             const searchButton = document.getElementById('searchButton');
             const searchInput = document.getElementById('movieQuery');
@@ -679,7 +684,6 @@
             const dropdownToggle = document.querySelector('.account-dropdown-toggle');
             const dropdownMenu = document.querySelector('.account-dropdown-menu');
             const accountName = document.querySelector('.account-name');
-
             function openSearch() {
                 if (window.innerWidth <= 599) {
                     navbarSearch.classList.add('active');
