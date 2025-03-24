@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          path: movie-tracker
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
