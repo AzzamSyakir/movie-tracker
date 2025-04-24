@@ -32,9 +32,6 @@ jobs:
           sed -i "s|^FACEBOOK_CLIENT_ID=.*|FACEBOOK_CLIENT_ID=${{ secrets.FACEBOOK_CLIENT_ID }}|" .env
           sed -i "s|^FACEBOOK_CLIENT_SECRET=.*|FACEBOOK_CLIENT_SECRET=${{ secrets.FACEBOOK_CLIENT_SECRET }}|" .env
 
-      - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
       - name: Login to DockerHub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
