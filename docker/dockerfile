@@ -1,12 +1,14 @@
+# 1) Base image
 FROM php:8.2-fpm
 
-# Define build arguments and environment variables
+# 2) Build args & env
 ARG user=user
 ARG uid=1000
-ENV user=$user
-ENV uid=$uid
+ENV USER=${user} \
+    UID=${uid} \
+    COMPOSER_ALLOW_SUPERUSER=1
 
-# Install system dependencies and PHP extensions
+# 3) Install system deps & PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -17,27 +19,37 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    nano && \
-    docker-php-ext-install pdo pdo_pgsql && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    nano \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Composer globally from the official Composer image
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install
-
-# Create a non-root user and set up its home directory
-RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
-    mkdir -p /home/$user/.composer
-
-# Set the working directory to /var/www
+# 4) Set working directory
 WORKDIR /var/www
 
-# Copy the application source code into the container
+# 5) Copy composer files dulu supaya caching layer maksimal
+COPY composer.json composer.lock ./
+
+# 6) Install Composer & dependencies
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-interaction \
+    --no-scripts
+
+# 7) Copy seluruh source app
 COPY . .
 
-# Change ownership for folders required by Laravel
-RUN chown -R $user:$user /var/www/storage /var/www/bootstrap/cache
+# 8) Buat user non-root & set permission
+RUN useradd -G www-data,root -u ${UID} -d /home/${USER} ${USER} \
+    && mkdir -p /home/${USER}/.composer \
+    && chown -R ${USER}:${USER} /var/www/storage /var/www/bootstrap/cache /home/${USER}
 
-# Switch to the non-root user
-USER $user
+# 9) Switch to non-root user
+USER ${USER}
+
+# 10) Expose port & default command
+EXPOSE 9000
+CMD ["php-fpm"]
