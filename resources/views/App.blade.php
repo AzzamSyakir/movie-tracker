@@ -566,7 +566,7 @@
         <div class="navbar-container">
             <div class="navbar-brand">
                 <nav class="navbar-title">
-                    <a href="/">Movie Addict</a>
+                    <a href="/">Movie Tracker</a>
                 </nav>
 
                 <button class="menu-toggle" onclick="toggleMenu()">
@@ -631,7 +631,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <h5 class="text-uppercase font-weight-bold">Movie Addict?</h5>
+                    <h5 class="text-uppercase font-weight-bold">Movie Tracker?</h5>
                     <p class="small">A place to find and keep track of your favorite movies. Always stay updated with
                         the latest films and interesting info about the world of cinema.</p>
                 </div>
@@ -659,7 +659,7 @@
             </div>
             <hr class="border-gray-700">
             <div class="text-center small">
-                <p class="mb-0">&copy; 2024 Movie Addict? All Rights Reserved.</p>
+                <p class="mb-0">&copy; 2024 Movie Tracker? All Rights Reserved.</p>
             </div>
         </div>
     </footer>
